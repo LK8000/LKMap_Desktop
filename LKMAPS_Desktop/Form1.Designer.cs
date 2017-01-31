@@ -1,0 +1,583 @@
+﻿using OSGeo.GDAL;
+using OSGeo.OSR;
+
+
+namespace LKMAPS_Desktop
+{
+    partial class LKMAPS_Desktop
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LKMAPS_Desktop));
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.richTextBoxHelp = new System.Windows.Forms.RichTextBox();
+            this.buttonZoomDown = new System.Windows.Forms.Button();
+            this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.progressBarTotal = new System.Windows.Forms.ProgressBar();
+            this.progressBarPartial = new System.Windows.Forms.ProgressBar();
+            this.l = new System.Windows.Forms.Label();
+            this.textBoxMapName = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.textBoxLatMin = new System.Windows.Forms.TextBox();
+            this.textBoxLatMax = new System.Windows.Forms.TextBox();
+            this.textBoxLonMin = new System.Windows.Forms.TextBox();
+            this.textBoxLonMax = new System.Windows.Forms.TextBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonOfflineTopology = new System.Windows.Forms.Button();
+            this.buttonOptions = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.labelPixelSize = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.trackBarPixelSize = new System.Windows.Forms.TrackBar();
+            this.buttonCreateTopology = new System.Windows.Forms.Button();
+            this.buttonZoomUp = new System.Windows.Forms.Button();
+            this.checkBoxShowExistingMaps = new System.Windows.Forms.CheckBox();
+            this.buttonCreateTerrain = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.labelStatus = new System.Windows.Forms.Label();
+            this.textBoxOutFolder = new System.Windows.Forms.TextBox();
+            this.buttonSelectOutFolder = new System.Windows.Forms.Button();
+            this.gmap = new GMap.NET.WindowsForms.GMapControl();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerLKM = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerFakeProgress = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerOSM = new System.ComponentModel.BackgroundWorker();
+            this.backgroundWorkerOffline = new System.ComponentModel.BackgroundWorker();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarPixelSize)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.splitContainer1.Panel1.Controls.Add(this.panel2);
+            this.splitContainer1.Panel1.Controls.Add(this.richTextBoxHelp);
+            this.splitContainer1.Panel1.Controls.Add(this.buttonZoomDown);
+            this.splitContainer1.Panel1.Controls.Add(this.trackBar1);
+            this.splitContainer1.Panel1.Controls.Add(this.progressBarTotal);
+            this.splitContainer1.Panel1.Controls.Add(this.progressBarPartial);
+            this.splitContainer1.Panel1.Controls.Add(this.l);
+            this.splitContainer1.Panel1.Controls.Add(this.textBoxMapName);
+            this.splitContainer1.Panel1.Controls.Add(this.pictureBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.panel1);
+            this.splitContainer1.Panel1.Resize += new System.EventHandler(this.splitContainer1_Panel1_Resize);
+            this.splitContainer1.Panel1MinSize = 250;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.gmap);
+            this.splitContainer1.Size = new System.Drawing.Size(823, 968);
+            this.splitContainer1.SplitterDistance = 320;
+            this.splitContainer1.SplitterWidth = 3;
+            this.splitContainer1.TabIndex = 0;
+            // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.linkLabel1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 913);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(320, 55);
+            this.panel2.TabIndex = 32;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.linkLabel1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel1.Location = new System.Drawing.Point(0, 37);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(127, 16);
+            this.linkLabel1.TabIndex = 1;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "http://www.lk8000.it";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // richTextBoxHelp
+            // 
+            this.richTextBoxHelp.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.richTextBoxHelp.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBoxHelp.Location = new System.Drawing.Point(4, 563);
+            this.richTextBoxHelp.Name = "richTextBoxHelp";
+            this.richTextBoxHelp.Size = new System.Drawing.Size(314, 344);
+            this.richTextBoxHelp.TabIndex = 0;
+            this.richTextBoxHelp.Text = "";
+            // 
+            // buttonZoomDown
+            // 
+            this.buttonZoomDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonZoomDown.Location = new System.Drawing.Point(240, 477);
+            this.buttonZoomDown.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonZoomDown.Name = "buttonZoomDown";
+            this.buttonZoomDown.Size = new System.Drawing.Size(59, 27);
+            this.buttonZoomDown.TabIndex = 31;
+            this.buttonZoomDown.Text = "-";
+            this.buttonZoomDown.UseVisualStyleBackColor = true;
+            this.buttonZoomDown.Click += new System.EventHandler(this.buttonZoomDown_Click);
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.trackBar1.LargeChange = 1;
+            this.trackBar1.Location = new System.Drawing.Point(249, 149);
+            this.trackBar1.Margin = new System.Windows.Forms.Padding(0);
+            this.trackBar1.Maximum = 1700;
+            this.trackBar1.Minimum = 1;
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.trackBar1.Size = new System.Drawing.Size(45, 324);
+            this.trackBar1.TabIndex = 30;
+            this.trackBar1.TickFrequency = 100;
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBar1.Value = 12;
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            // 
+            // progressBarTotal
+            // 
+            this.progressBarTotal.Location = new System.Drawing.Point(19, 447);
+            this.progressBarTotal.Name = "progressBarTotal";
+            this.progressBarTotal.Size = new System.Drawing.Size(212, 23);
+            this.progressBarTotal.TabIndex = 15;
+            // 
+            // progressBarPartial
+            // 
+            this.progressBarPartial.Location = new System.Drawing.Point(19, 421);
+            this.progressBarPartial.Name = "progressBarPartial";
+            this.progressBarPartial.Size = new System.Drawing.Size(212, 23);
+            this.progressBarPartial.TabIndex = 14;
+            // 
+            // l
+            // 
+            this.l.AutoSize = true;
+            this.l.Location = new System.Drawing.Point(18, 117);
+            this.l.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.l.Name = "l";
+            this.l.Size = new System.Drawing.Size(57, 13);
+            this.l.TabIndex = 7;
+            this.l.Text = "Map name";
+            // 
+            // textBoxMapName
+            // 
+            this.textBoxMapName.Location = new System.Drawing.Point(78, 114);
+            this.textBoxMapName.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxMapName.Name = "textBoxMapName";
+            this.textBoxMapName.Size = new System.Drawing.Size(150, 20);
+            this.textBoxMapName.TabIndex = 6;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.Location = new System.Drawing.Point(10, 11);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(296, 83);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.textBoxLatMin);
+            this.groupBox1.Controls.Add(this.textBoxLatMax);
+            this.groupBox1.Controls.Add(this.textBoxLonMin);
+            this.groupBox1.Controls.Add(this.textBoxLonMax);
+            this.groupBox1.Location = new System.Drawing.Point(17, 200);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(211, 112);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Map Area";
+            // 
+            // textBoxLatMin
+            // 
+            this.textBoxLatMin.Location = new System.Drawing.Point(68, 78);
+            this.textBoxLatMin.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLatMin.Name = "textBoxLatMin";
+            this.textBoxLatMin.Size = new System.Drawing.Size(76, 20);
+            this.textBoxLatMin.TabIndex = 3;
+            this.textBoxLatMin.TextChanged += new System.EventHandler(this.textBoxLatMin_TextChanged);
+            // 
+            // textBoxLatMax
+            // 
+            this.textBoxLatMax.Location = new System.Drawing.Point(68, 23);
+            this.textBoxLatMax.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLatMax.Name = "textBoxLatMax";
+            this.textBoxLatMax.Size = new System.Drawing.Size(76, 20);
+            this.textBoxLatMax.TabIndex = 2;
+            this.textBoxLatMax.TextChanged += new System.EventHandler(this.textBoxLatMax_TextChanged);
+            // 
+            // textBoxLonMin
+            // 
+            this.textBoxLonMin.Location = new System.Drawing.Point(4, 52);
+            this.textBoxLonMin.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLonMin.Name = "textBoxLonMin";
+            this.textBoxLonMin.Size = new System.Drawing.Size(76, 20);
+            this.textBoxLonMin.TabIndex = 1;
+            this.textBoxLonMin.TextChanged += new System.EventHandler(this.textBoxLonMin_TextChanged);
+            // 
+            // textBoxLonMax
+            // 
+            this.textBoxLonMax.Location = new System.Drawing.Point(124, 52);
+            this.textBoxLonMax.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLonMax.Name = "textBoxLonMax";
+            this.textBoxLonMax.Size = new System.Drawing.Size(76, 20);
+            this.textBoxLonMax.TabIndex = 0;
+            this.textBoxLonMax.TextChanged += new System.EventHandler(this.textBoxLonMax_TextChanged);
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.buttonOfflineTopology);
+            this.panel1.Controls.Add(this.buttonOptions);
+            this.panel1.Controls.Add(this.groupBox2);
+            this.panel1.Controls.Add(this.buttonCreateTopology);
+            this.panel1.Controls.Add(this.buttonZoomUp);
+            this.panel1.Controls.Add(this.checkBoxShowExistingMaps);
+            this.panel1.Controls.Add(this.buttonCreateTerrain);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.labelStatus);
+            this.panel1.Controls.Add(this.textBoxOutFolder);
+            this.panel1.Controls.Add(this.buttonSelectOutFolder);
+            this.panel1.Location = new System.Drawing.Point(8, 95);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(298, 452);
+            this.panel1.TabIndex = 17;
+            // 
+            // buttonOfflineTopology
+            // 
+            this.buttonOfflineTopology.Location = new System.Drawing.Point(118, 414);
+            this.buttonOfflineTopology.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonOfflineTopology.Name = "buttonOfflineTopology";
+            this.buttonOfflineTopology.Size = new System.Drawing.Size(104, 28);
+            this.buttonOfflineTopology.TabIndex = 36;
+            this.buttonOfflineTopology.Text = "Offline Topology";
+            this.buttonOfflineTopology.UseVisualStyleBackColor = true;
+            this.buttonOfflineTopology.Click += new System.EventHandler(this.buttonOfflineTopology_Click);
+            // 
+            // buttonOptions
+            // 
+            this.buttonOptions.Location = new System.Drawing.Point(231, 414);
+            this.buttonOptions.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonOptions.Name = "buttonOptions";
+            this.buttonOptions.Size = new System.Drawing.Size(59, 28);
+            this.buttonOptions.TabIndex = 35;
+            this.buttonOptions.Text = "Options";
+            this.buttonOptions.UseVisualStyleBackColor = true;
+            this.buttonOptions.Click += new System.EventHandler(this.buttonOptions_Click);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.labelPixelSize);
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.trackBarPixelSize);
+            this.groupBox2.Location = new System.Drawing.Point(8, 220);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Size = new System.Drawing.Size(214, 79);
+            this.groupBox2.TabIndex = 34;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Terrain Pixel Size";
+            // 
+            // labelPixelSize
+            // 
+            this.labelPixelSize.AutoSize = true;
+            this.labelPixelSize.Location = new System.Drawing.Point(69, 53);
+            this.labelPixelSize.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelPixelSize.Name = "labelPixelSize";
+            this.labelPixelSize.Size = new System.Drawing.Size(25, 13);
+            this.labelPixelSize.TabIndex = 33;
+            this.labelPixelSize.Text = "500";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(98, 53);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.TabIndex = 33;
+            this.label3.Text = "meters";
+            // 
+            // trackBarPixelSize
+            // 
+            this.trackBarPixelSize.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.trackBarPixelSize.LargeChange = 1;
+            this.trackBarPixelSize.Location = new System.Drawing.Point(4, 21);
+            this.trackBarPixelSize.Margin = new System.Windows.Forms.Padding(0);
+            this.trackBarPixelSize.Maximum = 50000;
+            this.trackBarPixelSize.Minimum = 9000;
+            this.trackBarPixelSize.Name = "trackBarPixelSize";
+            this.trackBarPixelSize.Size = new System.Drawing.Size(201, 45);
+            this.trackBarPixelSize.TabIndex = 33;
+            this.trackBarPixelSize.TickFrequency = 100;
+            this.trackBarPixelSize.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.trackBarPixelSize.Value = 9000;
+            this.trackBarPixelSize.ValueChanged += new System.EventHandler(this.trackBarPixelSize_ValueChanged_1);
+            // 
+            // buttonCreateTopology
+            // 
+            this.buttonCreateTopology.Location = new System.Drawing.Point(8, 414);
+            this.buttonCreateTopology.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonCreateTopology.Name = "buttonCreateTopology";
+            this.buttonCreateTopology.Size = new System.Drawing.Size(111, 28);
+            this.buttonCreateTopology.TabIndex = 15;
+            this.buttonCreateTopology.Text = "Online Topology";
+            this.buttonCreateTopology.UseVisualStyleBackColor = true;
+            this.buttonCreateTopology.Click += new System.EventHandler(this.buttonCreateTopology_Click);
+            // 
+            // buttonZoomUp
+            // 
+            this.buttonZoomUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonZoomUp.Location = new System.Drawing.Point(231, 18);
+            this.buttonZoomUp.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonZoomUp.Name = "buttonZoomUp";
+            this.buttonZoomUp.Size = new System.Drawing.Size(59, 31);
+            this.buttonZoomUp.TabIndex = 18;
+            this.buttonZoomUp.Text = "+";
+            this.buttonZoomUp.UseVisualStyleBackColor = true;
+            this.buttonZoomUp.Click += new System.EventHandler(this.buttonZoomUp_Click);
+            // 
+            // checkBoxShowExistingMaps
+            // 
+            this.checkBoxShowExistingMaps.AutoSize = true;
+            this.checkBoxShowExistingMaps.Location = new System.Drawing.Point(13, 78);
+            this.checkBoxShowExistingMaps.Name = "checkBoxShowExistingMaps";
+            this.checkBoxShowExistingMaps.Size = new System.Drawing.Size(119, 17);
+            this.checkBoxShowExistingMaps.TabIndex = 14;
+            this.checkBoxShowExistingMaps.Text = "Show existing maps";
+            this.checkBoxShowExistingMaps.UseVisualStyleBackColor = true;
+            this.checkBoxShowExistingMaps.CheckedChanged += new System.EventHandler(this.checkBoxShowExistingMaps_CheckedChanged);
+            // 
+            // buttonCreateTerrain
+            // 
+            this.buttonCreateTerrain.Location = new System.Drawing.Point(10, 381);
+            this.buttonCreateTerrain.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonCreateTerrain.Name = "buttonCreateTerrain";
+            this.buttonCreateTerrain.Size = new System.Drawing.Size(212, 28);
+            this.buttonCreateTerrain.TabIndex = 13;
+            this.buttonCreateTerrain.Text = "Create Terrain";
+            this.buttonCreateTerrain.UseVisualStyleBackColor = true;
+            this.buttonCreateTerrain.Click += new System.EventHandler(this.buttonCreateTerrain_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 50);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Out Folder";
+            // 
+            // labelStatus
+            // 
+            this.labelStatus.AutoSize = true;
+            this.labelStatus.Location = new System.Drawing.Point(13, 306);
+            this.labelStatus.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelStatus.Name = "labelStatus";
+            this.labelStatus.Size = new System.Drawing.Size(0, 13);
+            this.labelStatus.TabIndex = 16;
+            // 
+            // textBoxOutFolder
+            // 
+            this.textBoxOutFolder.Location = new System.Drawing.Point(71, 46);
+            this.textBoxOutFolder.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxOutFolder.Name = "textBoxOutFolder";
+            this.textBoxOutFolder.Size = new System.Drawing.Size(122, 20);
+            this.textBoxOutFolder.TabIndex = 10;
+            this.textBoxOutFolder.TextChanged += new System.EventHandler(this.textBoxOutFolder_TextChanged);
+            // 
+            // buttonSelectOutFolder
+            // 
+            this.buttonSelectOutFolder.Location = new System.Drawing.Point(197, 46);
+            this.buttonSelectOutFolder.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonSelectOutFolder.Name = "buttonSelectOutFolder";
+            this.buttonSelectOutFolder.Size = new System.Drawing.Size(25, 19);
+            this.buttonSelectOutFolder.TabIndex = 12;
+            this.buttonSelectOutFolder.Text = "...";
+            this.buttonSelectOutFolder.UseVisualStyleBackColor = true;
+            this.buttonSelectOutFolder.Click += new System.EventHandler(this.buttonSelectOutFolder_Click);
+            // 
+            // gmap
+            // 
+            this.gmap.Bearing = 0F;
+            this.gmap.CanDragMap = true;
+            this.gmap.EmptyTileColor = System.Drawing.Color.Navy;
+            this.gmap.GrayScaleMode = false;
+            this.gmap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.gmap.LevelsKeepInMemmory = 5;
+            this.gmap.Location = new System.Drawing.Point(2, 0);
+            this.gmap.Margin = new System.Windows.Forms.Padding(2);
+            this.gmap.MarkersEnabled = true;
+            this.gmap.MaxZoom = 17;
+            this.gmap.MinZoom = 1;
+            this.gmap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.gmap.Name = "gmap";
+            this.gmap.NegativeMode = false;
+            this.gmap.PolygonsEnabled = true;
+            this.gmap.RetryLoadTile = 0;
+            this.gmap.RoutesEnabled = true;
+            this.gmap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.gmap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.gmap.ShowTileGridLines = false;
+            this.gmap.Size = new System.Drawing.Size(250, 513);
+            this.gmap.TabIndex = 1;
+            this.gmap.Zoom = 6D;
+            this.gmap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.gmap_OnMarkerClick);
+            this.gmap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gmap_MouseDown);
+            this.gmap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gmap_MouseMove);
+            this.gmap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gmap_MouseUp);
+            // 
+            // backgroundWorker1
+            // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            // 
+            // backgroundWorkerLKM
+            // 
+            this.backgroundWorkerLKM.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerLKM_DoWork);
+            this.backgroundWorkerLKM.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorkerLKM_ProgressChanged);
+            this.backgroundWorkerLKM.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorkerLKM_RunWorkerCompleted);
+            // 
+            // backgroundWorkerFakeProgress
+            // 
+            this.backgroundWorkerFakeProgress.WorkerReportsProgress = true;
+            this.backgroundWorkerFakeProgress.WorkerSupportsCancellation = true;
+            this.backgroundWorkerFakeProgress.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerFakeProgress_DoWork);
+            // 
+            // backgroundWorkerOSM
+            // 
+            this.backgroundWorkerOSM.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerOSM_DoWork);
+            // 
+            // backgroundWorkerOffline
+            // 
+            this.backgroundWorkerOffline.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerOffline_DoWork);
+            // 
+            // LKMAPS_Desktop
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(823, 968);
+            this.Controls.Add(this.splitContainer1);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Name = "LKMAPS_Desktop";
+            this.Text = "LKMAPS_Desktop";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LKMAPS_Desktop_FormClosing);
+            this.Load += new System.EventHandler(this.LKMAPS_Desktop_Load);
+            this.Resize += new System.EventHandler(this.LKMAPS_Desktop_Resize);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBarPixelSize)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private GMap.NET.WindowsForms.GMapControl gmap;
+        private System.Windows.Forms.TextBox textBoxLatMin;
+        private System.Windows.Forms.TextBox textBoxLatMax;
+        private System.Windows.Forms.TextBox textBoxLonMin;
+        private System.Windows.Forms.TextBox textBoxLonMax;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label l;
+        private System.Windows.Forms.TextBox textBoxMapName;
+        private System.Windows.Forms.Button buttonSelectOutFolder;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBoxOutFolder;
+        private System.Windows.Forms.Button buttonCreateTerrain;
+        private System.Windows.Forms.ProgressBar progressBarTotal;
+        private System.Windows.Forms.ProgressBar progressBarPartial;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Label labelStatus;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button buttonZoomDown;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Button buttonZoomUp;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.RichTextBox richTextBoxHelp;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox checkBoxShowExistingMaps;
+        private System.Windows.Forms.Button buttonCreateTopology;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerLKM;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerFakeProgress;
+        private System.Windows.Forms.Label labelPixelSize;
+        private System.Windows.Forms.TrackBar trackBarPixelSize;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button buttonOptions;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerOSM;
+        private System.Windows.Forms.Button buttonOfflineTopology;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerOffline;
+
+
+    }
+}
+
