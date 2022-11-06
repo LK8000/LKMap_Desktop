@@ -2670,16 +2670,13 @@ namespace LKMAPS_Desktop
             {
                 strContent = reader.ReadToEnd();
             }
-            string[] lines = strContent.Split('\n');
-            string l = lines[3];
-            if (  l != "1 slots available now." && l != "2 slots available now.") 
+
+            if (!strContent.Contains(" slots available now.\n"))
             {
                 MessageBox.Show("No Slot avalable at the moment on OSM Server\n\n" + strContent + "\nRetry later");
                 return false;
             }
-
             return true;
-
         }
 
 
