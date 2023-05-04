@@ -19,10 +19,7 @@ using GMap.NET.WindowsForms.ToolTips;
 using System.Globalization;
 using System.Threading;
 using System.IO.Compression;
-
-
-
-
+using System.Security.Cryptography;
 
 namespace LKMAPS_Desktop
 {
@@ -75,16 +72,24 @@ namespace LKMAPS_Desktop
         double _minWaterArea = 451230;
         bool _fakeProcess = false;
 
-
+        TimeSpan durationOSMData = TimeSpan.Zero; //DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")));
+        TimeSpan durationOSMExtraction = TimeSpan.Zero; // DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")));
+        TimeSpan durationOSMProcessing = TimeSpan.Zero; // DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")));
+        String StartTime = ""; //DateTime.Now.ToString("hh:mm:ss");
+        String FinishTime = ""; // DateTime.Now.ToString("hh:mm:ss");
+        string LastActionTaken = "";
         public LKMAPS_Desktop()
         {
             
             InitializeComponent();
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 
-
+            
             _userFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\";
             bool exists = System.IO.Directory.Exists(_userFolder);
+            //if (exists) 
+            //    Directory.Delete(_userFolder,recursive:true);
+            //exists = System.IO.Directory.Exists(_userFolder);
             if (!exists)
                 System.IO.Directory.CreateDirectory(_userFolder);
             _srtmFolder = _userFolder + "srtm\\";
@@ -142,18 +147,11 @@ namespace LKMAPS_Desktop
 
         private void LKMAPS_Desktop_Load(object sender, EventArgs e)
         {
-
-
-
-
-
-
-            
-
             System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             string version = fvi.FileVersion;
 
+            LKMAPS_Desktop.ActiveForm.Text = "LKMAPS Desktop:- Version " + version;
             richTextBoxHelp.Text = "Usage :\n";
             richTextBoxHelp.Text += "1) Insert a map name and select the LK8000 '_Map' folder where maps will be created\n";
             richTextBoxHelp.Text += "2) Define your area either using the map or entering the bounding coordinates on the ‘Map area’ group\n";
@@ -163,20 +161,15 @@ namespace LKMAPS_Desktop
             richTextBoxHelp.Text += "Map interraction :\n";
             richTextBoxHelp.Text += "Left Mouse : Select area\n";
             richTextBoxHelp.Text += "Right mouse : Pan \n";
-            richTextBoxHelp.Text += "Weel : zoom\n";
+            richTextBoxHelp.Text += "Wheel : zoom\n";
             richTextBoxHelp.Text += "\n";
-            richTextBoxHelp.Text += "LKMAPS version " +  version + " Tonino Tarsi - 2019\n" ;
+            richTextBoxHelp.Text += "LKMAPS version " +  version + " Tonino Tarsi & Others - 2023\n" ;
             //richTextBoxHelp.Text += "\n";
-            richTextBoxHelp.Text += "OpenStreetMap data are distributed under Open Database License\n";
+            richTextBoxHelp.Text += "OpenStreetMap data is distributed under Open Database License\n";
             richTextBoxHelp.Text += "Terrain is from public domain SRTM data\n";
 
-
-
-
-
-
             Updater upd = new Updater(this);
-            upd.checkUpdate();
+            //upd.checkUpdate(); Disabled by John Blyth
 
             splitContainer1.Dock = DockStyle.Fill;
             splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
@@ -302,10 +295,10 @@ namespace LKMAPS_Desktop
             _minLon = Math.Min(lon1, lon2);
             _maxLon = Math.Max(lon1, lon2);
 
-            textBoxLonMin.Text = _minLon.ToString("0.00");
-            textBoxLonMax.Text = _maxLon.ToString("0.00");
-            textBoxLatMin.Text = _minLat.ToString("0.00");
-            textBoxLatMax.Text = _maxLat.ToString("0.00");
+            textBoxLonMin.Text = _minLon.ToString("0.00000");
+            textBoxLonMax.Text = _maxLon.ToString("0.00000");
+            textBoxLatMin.Text = _minLat.ToString("0.00000");
+            textBoxLatMax.Text = _maxLat.ToString("0.00000");
 
             updateMapOverlay();
 
@@ -530,6 +523,7 @@ namespace LKMAPS_Desktop
                 Directory.CreateDirectory(_outFolder);
             }
 
+            StartTime = DateTime.Now.ToString("hh:mm:ss");
 
             _mapName = textBoxMapName.Text;
 
@@ -616,9 +610,11 @@ namespace LKMAPS_Desktop
 
             enableControls(true);
 
-            MessageBox.Show("Done");
+            //MessageBox.Show("Done");
+            FinishTime = DateTime.Now.ToString("hh:mm:ss");
+            MessageBox.Show("Finished Generating " + _mapName + ".DEM Terrain File.\n\nDigital Elevation Model Data Download Time:- " + DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime)));
 
-           
+
         }
 
         private void Export2DEM(string tiff_file, String outFolder, string mapName )
@@ -908,8 +904,15 @@ namespace LKMAPS_Desktop
         private void startFakeProgress()
         {
             _fakeProcess = true;
-            
-            backgroundWorkerFakeProgress.RunWorkerAsync();
+
+            try
+            {
+                backgroundWorkerFakeProgress.RunWorkerAsync();
+            }
+            catch
+            {
+                var a1 = 0;
+            }
         }
         private void stopsFakeProgress()
         {
@@ -1258,14 +1261,15 @@ namespace LKMAPS_Desktop
 
         private void buttonCreateTopology_Click(object sender, EventArgs e)
         {
-
+            //string a1 =durationOSMData.ToString("hh\\:mm\\:ss");
+            LastActionTaken = "Download OSM Data";
             if (!checkAPIStatus())
                 return;
             
             double area = (_maxLat - _minLat) * (_maxLon - _minLon);
-            if (area > 5)
+            if (area > 15) //was 5 John Blyth
             {
-                DialogResult dialogResult = MessageBox.Show(" Your area is very big and may require long to process\nPlease consider using the offline method\nTimeout on server is set to 1 hour\nIf you do not receive data after that time you can close the program\nContinue?", "Big area", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Your area is very big and may require long to download and process\n\nPlease consider using the offline method\n\nTimeout on server is set to 1 hour\nIf you do not receive data after that time you can close the program\n\nContinue?", "Big area", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.No)
                 {
                     return;
@@ -1294,7 +1298,8 @@ namespace LKMAPS_Desktop
         private void backgroundWorkerOSM_DoWork(object sender, DoWorkEventArgs e)
         {
             enableControls(false);
-
+            StartTime = DateTime.Now.ToString("hh:mm:ss");
+ 
             _step = 1; // Download OSM
             _nTiles = 1;
             NSTEPS = 8;
@@ -1358,30 +1363,55 @@ namespace LKMAPS_Desktop
             downloadOSM(System.Uri.EscapeUriString(api_url), "osm.osm", _osmFolder);
 
             _step++;
-            processOSM(_osmFolder + "osm.osm", _mapName,  _minLon, _minLat, _maxLon, _maxLat);
-            _step++;
 
-            stopsFakeProgress();
+            //Added John Blyth 300423
+            FinishTime = DateTime.Now.ToString("hh:mm:ss");
+            durationOSMData = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
+            char InvertedC = (char)34;
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm"))
+            {
+                File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm", textBoxOutFolder.Text + "\\osm.osm", true);
+            }
+            var command = InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + textBoxOutFolder.Text + "\\osm.osm" + InvertedC + " -o=" + InvertedC + textBoxOutFolder.Text + "\\osm.osm.pbf" + InvertedC;
+            System.Diagnostics.ProcessStartInfo cmdsi = new ProcessStartInfo(command);
+            //cmdsi.WindowStyle = ProcessWindowStyle.Hidden;
+            cmdsi.CreateNoWindow = true;
+            //cmdsi.Arguments = command;
+            cmdsi.RedirectStandardOutput = true;
+            cmdsi.UseShellExecute = false;
+            var cmd = Process.Start(cmdsi);
+            var output = cmd.StandardOutput.ReadToEnd();
+            cmd.WaitForExit();
 
-            _step++;
-            processOcean(_mapName, _minLon, _minLat, _maxLon, _maxLat);
-
-            _step++;
-            createTBLFile(_mapName);
-
-            _step++;
-            //createFinalZip(_mapName, _outFolder);
-            createFinalZipNew(_mapName, _outFolder);
-
-            _step = NSTEPS;
+            _offlineOSMFile = textBoxOutFolder.Text + "\\osm.osm.pbf";
+            backgroundWorkerOffline.RunWorkerAsync();
 
 
-            enableControls(true);
+            // Deactivated by John Blyth 300423
+            //ProcessOSM(_osmFolder + "osm.osm", _mapName,  _minLon, _minLat, _maxLon, _maxLat);
+            //_step++;
 
-            _step = NSTEPS;
-            SetProgress(100);
+            //stopsFakeProgress();
 
-            MessageBox.Show("Done");
+            //_step++;
+            //processOcean(_mapName, _minLon, _minLat, _maxLon, _maxLat);
+
+            //_step++;
+            //createTBLFile(_mapName);
+
+            //_step++;
+            ////createFinalZip(_mapName, _outFolder);
+            //createFinalZipNew(_mapName, _outFolder);
+
+            //_step = NSTEPS;
+
+
+            //enableControls(true);
+
+            //_step = NSTEPS;
+            //SetProgress(100);
+
+            //MessageBox.Show("Finished Generating " + _mapName + " .DEM File.");
 
         }
 
@@ -3718,6 +3748,66 @@ namespace LKMAPS_Desktop
 
         }
 
+        private void CreatePbfButton_Click(object sender, EventArgs e)
+        {
+            string LatSouth = textBoxLatMin.Text;
+            string LongWest = textBoxLonMin.Text;
+            string LatNorth = textBoxLatMax.Text;
+            string LongEast = textBoxLonMax.Text;
+            _mapName = textBoxMapName.Text;
+            char InvertedC = (char)34;
+            //MessageBox.Show(InvertedC + Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm" + InvertedC +"\n" + InvertedC + textBoxOutFolder.Text + "\\osm.osm" + InvertedC);
+            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm"))
+            {
+                File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm" ,textBoxOutFolder.Text + "\\osm.osm", true);
+            }
+            using (var sr = new StreamWriter(textBoxOutFolder.Text + "\\LastOsmConvertRun.bat"))
+            {
+                sr.WriteLine(InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + textBoxOutFolder.Text + "\\osm.osm" + InvertedC + " -o=" + InvertedC + textBoxOutFolder.Text + "\\osm.osm.pbf" + InvertedC);
+            }
+            using (var sr = new StreamWriter(textBoxOutFolder.Text + "\\LastRun.bat"))
+            {
+                sr.WriteLine(InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + textBoxOutFolder.Text + "\\north-america-latest.osm.pbf" + InvertedC + " -b=" + LongWest + "," + LatSouth + "," + LongEast + "," + LatNorth + " -o=" + InvertedC + textBoxOutFolder.Text + "\\" + textBoxMapName.Text + ".osm.pbf" + InvertedC);
+            }
+            DateTime t1 = DateTime.Now;
+            string a = "Please be patient, this could take up to 30 minutes!" + Environment.NewLine + Environment.NewLine + "Started Extraction Process at " + DateTime.Now.ToString("HH:mm:ss");
+            //textBox10.Visible = true;
+            //textBox10.Text = a;
+            //textBox10.Refresh();
+            //System.Diagnostics.Process proc = new System.Diagnostics.Process();
+            //proc.EnableRaisingEvents = false;
+            //proc.StartInfo.FileName = textBox1.Text + "\\LastRun.bat";
+            //proc.Start();
+            //var command = InvertedC + textBox1.Text + "\\" + "osmconvert64-0.8.8p.exe" + InvertedC + " " + InvertedC + button6.Text + InvertedC + " -b=" + LongWest + "," + LatSouth + "," + LongEast + "," + LatNorth + " -o=" + InvertedC + textBox1.Text + "\\" + textBox2.Text + ".osm.pbf" + InvertedC;
+            //var command = InvertedC + textBoxOutFolder.Text + "\\LastOsmConvertRun.bat" + InvertedC;
+            //Var command = InvertedC + textBoxOutFolder.Text + "\\LastRun.bat" + InvertedC;
+            var command=InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + textBoxOutFolder.Text + "\\osm.osm" + InvertedC + " -o=" + InvertedC + textBoxOutFolder.Text + "\\osm.osm.pbf" + InvertedC;
+            System.Diagnostics.ProcessStartInfo cmdsi = new ProcessStartInfo(command);
+            //cmdsi.WindowStyle = ProcessWindowStyle.Hidden;
+            cmdsi.CreateNoWindow = true;
+            //cmdsi.Arguments = command;
+            cmdsi.RedirectStandardOutput = true;
+            cmdsi.UseShellExecute = false;
+            var cmd = Process.Start(cmdsi);
+            var output = cmd.StandardOutput.ReadToEnd();
+            cmd.WaitForExit();
+
+            _offlineOSMFile = textBoxOutFolder.Text + "\\osm.osm.pbf";
+            backgroundWorkerOffline.RunWorkerAsync();
+
+            DateTime t2 = DateTime.Now;
+            TimeSpan result = t2.Subtract(t1);
+            a = a + Environment.NewLine + Environment.NewLine + "Finished Extraction Process at " + DateTime.Now.ToString("HH:mm:ss") + Environment.NewLine + Environment.NewLine + "Elapsed Time was " + result;
+            //textBox10.Text = a;
+            MessageBox.Show(a);
+
+        }
+
+        private void textBoxMapName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void backgroundWorkerLKM_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
@@ -3743,7 +3833,10 @@ namespace LKMAPS_Desktop
             _outFolder = textBoxOutFolder.Text;
             _nDownloaded = 0;
             _mapName = textBoxMapName.Text;
-
+            if (File.Exists(_outFolder + "\\" + _mapName + ".osm.pbf"))
+            {
+                goto SkipPickingFile;
+            }
             if (!Directory.Exists(_userFolder + "/" + _mapName))
             {
                 Directory.CreateDirectory(_userFolder + "/" + _mapName);
@@ -3760,12 +3853,56 @@ namespace LKMAPS_Desktop
             openFileDialog1.FilterIndex = 2;
             openFileDialog1.RestoreDirectory = true;
 
-            if(openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                _offlineOSMFile = openFileDialog1.FileName; 
-                backgroundWorkerOffline.RunWorkerAsync();
-            }
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    //goto SkipJB1;
+                     //Added by John Blyth 30042023
+                    char InvertedC = (char)34;
+                StartTime = DateTime.Now.ToString("hh:mm:ss");
 
+                var command = InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + openFileDialog1.FileName + InvertedC + " -b=" + textBoxLonMin.Text + "," + textBoxLatMin.Text + "," + textBoxLonMax.Text + "," + textBoxLatMax.Text + " -o=" + InvertedC + textBoxOutFolder.Text + "\\" + textBoxMapName.Text + ".osm.pbf" + InvertedC;
+                    //using (var sr = new StreamWriter(textBoxOutFolder.Text + "\\LastRun.bat"))
+                    //{
+                    //    sr.WriteLine(command);
+                   // }
+                    System.Diagnostics.ProcessStartInfo cmdsi = new ProcessStartInfo(command);
+                    //cmdsi.WindowStyle = ProcessWindowStyle.Maximized;
+                    cmdsi.CreateNoWindow = true;
+                    cmdsi.RedirectStandardOutput = true;
+                    cmdsi.UseShellExecute = false;
+                    var cmd = Process.Start(cmdsi);
+                    int i = 0;
+                    while (!cmd.HasExited)
+                    {
+                        //i++;
+                        if (i > 100)
+                        {
+                            i = 0;
+                        }
+                        if (!cmd.HasExited)
+                        {
+                        FinishTime = DateTime.Now.ToString("hh:mm:ss");
+                            durationOSMExtraction = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
+                            labelStatus.Text = "Extracting:- may take up to 5 minutes " + durationOSMExtraction;
+                            labelStatus.Refresh();
+                            progressBarPartial.Value = Math.Min(i, 100);
+                            progressBarPartial.Refresh();
+                        }
+                        i += 10;
+                        Thread.Sleep(1000);
+                    }
+                //var output = cmd.StandardOutput.ReadToEnd();
+                //cmd.WaitForExit();
+               }
+            SkipPickingFile:
+            _offlineOSMFile =textBoxOutFolder.Text + "\\" + textBoxMapName.Text + ".osm.pbf";
+                goto SkipHere1;
+                // End of John Blyth add
+
+               //SkipJB1:
+                _offlineOSMFile = openFileDialog1.FileName;
+                SkipHere1:
+                backgroundWorkerOffline.RunWorkerAsync();
             
         }
 
@@ -3775,6 +3912,8 @@ namespace LKMAPS_Desktop
             startFakeProgress();
 
             enableControls(false);
+
+            StartTime = DateTime.Now.ToString("hh:mm:ss");
 
             _step = 1; // Download OSM
             _nTiles = 1;
@@ -3807,7 +3946,18 @@ namespace LKMAPS_Desktop
             _step = NSTEPS;
             SetProgress(100);
 
-            MessageBox.Show("Done");
+            //MessageBox.Show("Done");
+            FinishTime = DateTime.Now.ToString("hh:mm:ss");
+            TimeSpan durationOSMProcessing = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
+           if (LastActionTaken.Equals("Download OSM Data"))
+            {
+                MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "OpenStreetMap Download Time:- " + durationOSMData + "\n" + "Extracted OpenStreetMap Processing Time:- " + durationOSMProcessing);
+            }
+            else
+            {
+                MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n" + "OpenStreetMap Extraction Time:- " + durationOSMExtraction + "\n" + "Extracted OpenStreetMap Processing Time:- " + durationOSMProcessing);
+            }
+
         }
 
         private void fixDBF_LDID(string mapName)

@@ -21,7 +21,7 @@
       <Value Profile="(Default)">90</Value>
     </Setting>
     <Setting Name="OutFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">c:/_Maps</Value>
+      <Value Profile="(Default)">c:\_Maps</Value>
     </Setting>
     <Setting Name="ShowExistingMaps" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

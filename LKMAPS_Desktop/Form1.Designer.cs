@@ -43,13 +43,13 @@ namespace LKMAPS_Desktop
             this.progressBarPartial = new System.Windows.Forms.ProgressBar();
             this.l = new System.Windows.Forms.Label();
             this.textBoxMapName = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBoxLatMin = new System.Windows.Forms.TextBox();
             this.textBoxLatMax = new System.Windows.Forms.TextBox();
             this.textBoxLonMin = new System.Windows.Forms.TextBox();
             this.textBoxLonMax = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.CreatePbfButton = new System.Windows.Forms.Button();
             this.buttonOfflineTopology = new System.Windows.Forms.Button();
             this.buttonOptions = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -70,24 +70,24 @@ namespace LKMAPS_Desktop
             this.backgroundWorkerFakeProgress = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerOSM = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerOffline = new System.ComponentModel.BackgroundWorker();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPixelSize)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -110,9 +110,8 @@ namespace LKMAPS_Desktop
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.gmap);
-            this.splitContainer1.Size = new System.Drawing.Size(823, 968);
-            this.splitContainer1.SplitterDistance = 320;
-            this.splitContainer1.SplitterWidth = 3;
+            this.splitContainer1.Size = new System.Drawing.Size(1097, 703);
+            this.splitContainer1.SplitterDistance = 425;
             this.splitContainer1.TabIndex = 0;
             // 
             // panel2
@@ -120,9 +119,10 @@ namespace LKMAPS_Desktop
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.linkLabel1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Location = new System.Drawing.Point(0, 913);
+            this.panel2.Location = new System.Drawing.Point(0, 636);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(320, 55);
+            this.panel2.Size = new System.Drawing.Size(425, 67);
             this.panel2.TabIndex = 32;
             // 
             // linkLabel1
@@ -130,9 +130,10 @@ namespace LKMAPS_Desktop
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.linkLabel1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.Location = new System.Drawing.Point(0, 37);
+            this.linkLabel1.Location = new System.Drawing.Point(0, 44);
+            this.linkLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(127, 16);
+            this.linkLabel1.Size = new System.Drawing.Size(167, 21);
             this.linkLabel1.TabIndex = 1;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "http://www.lk8000.it";
@@ -142,19 +143,20 @@ namespace LKMAPS_Desktop
             // 
             this.richTextBoxHelp.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.richTextBoxHelp.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBoxHelp.Location = new System.Drawing.Point(4, 563);
+            this.richTextBoxHelp.Location = new System.Drawing.Point(5, 693);
+            this.richTextBoxHelp.Margin = new System.Windows.Forms.Padding(4);
             this.richTextBoxHelp.Name = "richTextBoxHelp";
-            this.richTextBoxHelp.Size = new System.Drawing.Size(314, 344);
+            this.richTextBoxHelp.Size = new System.Drawing.Size(417, 423);
             this.richTextBoxHelp.TabIndex = 0;
             this.richTextBoxHelp.Text = "";
             // 
             // buttonZoomDown
             // 
             this.buttonZoomDown.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonZoomDown.Location = new System.Drawing.Point(240, 477);
+            this.buttonZoomDown.Location = new System.Drawing.Point(320, 588);
             this.buttonZoomDown.Margin = new System.Windows.Forms.Padding(0);
             this.buttonZoomDown.Name = "buttonZoomDown";
-            this.buttonZoomDown.Size = new System.Drawing.Size(59, 27);
+            this.buttonZoomDown.Size = new System.Drawing.Size(79, 33);
             this.buttonZoomDown.TabIndex = 31;
             this.buttonZoomDown.Text = "-";
             this.buttonZoomDown.UseVisualStyleBackColor = true;
@@ -164,13 +166,13 @@ namespace LKMAPS_Desktop
             // 
             this.trackBar1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.trackBar1.LargeChange = 1;
-            this.trackBar1.Location = new System.Drawing.Point(249, 149);
+            this.trackBar1.Location = new System.Drawing.Point(332, 183);
             this.trackBar1.Margin = new System.Windows.Forms.Padding(0);
             this.trackBar1.Maximum = 1700;
             this.trackBar1.Minimum = 1;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.trackBar1.Size = new System.Drawing.Size(45, 324);
+            this.trackBar1.Size = new System.Drawing.Size(56, 399);
             this.trackBar1.TabIndex = 30;
             this.trackBar1.TickFrequency = 100;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
@@ -179,47 +181,36 @@ namespace LKMAPS_Desktop
             // 
             // progressBarTotal
             // 
-            this.progressBarTotal.Location = new System.Drawing.Point(19, 447);
+            this.progressBarTotal.Location = new System.Drawing.Point(25, 550);
+            this.progressBarTotal.Margin = new System.Windows.Forms.Padding(4);
             this.progressBarTotal.Name = "progressBarTotal";
-            this.progressBarTotal.Size = new System.Drawing.Size(212, 23);
+            this.progressBarTotal.Size = new System.Drawing.Size(283, 28);
             this.progressBarTotal.TabIndex = 15;
             // 
             // progressBarPartial
             // 
-            this.progressBarPartial.Location = new System.Drawing.Point(19, 421);
+            this.progressBarPartial.Location = new System.Drawing.Point(25, 518);
+            this.progressBarPartial.Margin = new System.Windows.Forms.Padding(4);
             this.progressBarPartial.Name = "progressBarPartial";
-            this.progressBarPartial.Size = new System.Drawing.Size(212, 23);
+            this.progressBarPartial.Size = new System.Drawing.Size(283, 28);
             this.progressBarPartial.TabIndex = 14;
             // 
             // l
             // 
             this.l.AutoSize = true;
-            this.l.Location = new System.Drawing.Point(18, 117);
-            this.l.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.l.Location = new System.Drawing.Point(24, 144);
             this.l.Name = "l";
-            this.l.Size = new System.Drawing.Size(57, 13);
+            this.l.Size = new System.Drawing.Size(71, 16);
             this.l.TabIndex = 7;
             this.l.Text = "Map name";
             // 
             // textBoxMapName
             // 
-            this.textBoxMapName.Location = new System.Drawing.Point(78, 114);
-            this.textBoxMapName.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxMapName.Location = new System.Drawing.Point(104, 140);
             this.textBoxMapName.Name = "textBoxMapName";
-            this.textBoxMapName.Size = new System.Drawing.Size(150, 20);
+            this.textBoxMapName.Size = new System.Drawing.Size(199, 22);
             this.textBoxMapName.TabIndex = 6;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(10, 11);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(296, 83);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
+            this.textBoxMapName.TextChanged += new System.EventHandler(this.textBoxMapName_TextChanged);
             // 
             // groupBox1
             // 
@@ -227,54 +218,49 @@ namespace LKMAPS_Desktop
             this.groupBox1.Controls.Add(this.textBoxLatMax);
             this.groupBox1.Controls.Add(this.textBoxLonMin);
             this.groupBox1.Controls.Add(this.textBoxLonMax);
-            this.groupBox1.Location = new System.Drawing.Point(17, 200);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Location = new System.Drawing.Point(23, 246);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(211, 112);
+            this.groupBox1.Size = new System.Drawing.Size(281, 138);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Map Area";
             // 
             // textBoxLatMin
             // 
-            this.textBoxLatMin.Location = new System.Drawing.Point(68, 78);
-            this.textBoxLatMin.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLatMin.Location = new System.Drawing.Point(91, 96);
             this.textBoxLatMin.Name = "textBoxLatMin";
-            this.textBoxLatMin.Size = new System.Drawing.Size(76, 20);
+            this.textBoxLatMin.Size = new System.Drawing.Size(100, 22);
             this.textBoxLatMin.TabIndex = 3;
             this.textBoxLatMin.TextChanged += new System.EventHandler(this.textBoxLatMin_TextChanged);
             // 
             // textBoxLatMax
             // 
-            this.textBoxLatMax.Location = new System.Drawing.Point(68, 23);
-            this.textBoxLatMax.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLatMax.Location = new System.Drawing.Point(91, 28);
             this.textBoxLatMax.Name = "textBoxLatMax";
-            this.textBoxLatMax.Size = new System.Drawing.Size(76, 20);
+            this.textBoxLatMax.Size = new System.Drawing.Size(100, 22);
             this.textBoxLatMax.TabIndex = 2;
             this.textBoxLatMax.TextChanged += new System.EventHandler(this.textBoxLatMax_TextChanged);
             // 
             // textBoxLonMin
             // 
-            this.textBoxLonMin.Location = new System.Drawing.Point(4, 52);
-            this.textBoxLonMin.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLonMin.Location = new System.Drawing.Point(5, 64);
             this.textBoxLonMin.Name = "textBoxLonMin";
-            this.textBoxLonMin.Size = new System.Drawing.Size(76, 20);
+            this.textBoxLonMin.Size = new System.Drawing.Size(100, 22);
             this.textBoxLonMin.TabIndex = 1;
             this.textBoxLonMin.TextChanged += new System.EventHandler(this.textBoxLonMin_TextChanged);
             // 
             // textBoxLonMax
             // 
-            this.textBoxLonMax.Location = new System.Drawing.Point(124, 52);
-            this.textBoxLonMax.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxLonMax.Location = new System.Drawing.Point(165, 64);
             this.textBoxLonMax.Name = "textBoxLonMax";
-            this.textBoxLonMax.Size = new System.Drawing.Size(76, 20);
+            this.textBoxLonMax.Size = new System.Drawing.Size(100, 22);
             this.textBoxLonMax.TabIndex = 0;
             this.textBoxLonMax.TextChanged += new System.EventHandler(this.textBoxLonMax_TextChanged);
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.CreatePbfButton);
             this.panel1.Controls.Add(this.buttonOfflineTopology);
             this.panel1.Controls.Add(this.buttonOptions);
             this.panel1.Controls.Add(this.groupBox2);
@@ -286,17 +272,28 @@ namespace LKMAPS_Desktop
             this.panel1.Controls.Add(this.labelStatus);
             this.panel1.Controls.Add(this.textBoxOutFolder);
             this.panel1.Controls.Add(this.buttonSelectOutFolder);
-            this.panel1.Location = new System.Drawing.Point(8, 95);
+            this.panel1.Location = new System.Drawing.Point(11, 117);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(298, 452);
+            this.panel1.Size = new System.Drawing.Size(397, 556);
             this.panel1.TabIndex = 17;
+            // 
+            // CreatePbfButton
+            // 
+            this.CreatePbfButton.Location = new System.Drawing.Point(157, 468);
+            this.CreatePbfButton.Margin = new System.Windows.Forms.Padding(2);
+            this.CreatePbfButton.Name = "CreatePbfButton";
+            this.CreatePbfButton.Size = new System.Drawing.Size(139, 35);
+            this.CreatePbfButton.TabIndex = 33;
+            this.CreatePbfButton.Text = "Help + Utilities";
+            this.CreatePbfButton.UseVisualStyleBackColor = true;
+            this.CreatePbfButton.Click += new System.EventHandler(this.CreatePbfButton_Click);
             // 
             // buttonOfflineTopology
             // 
-            this.buttonOfflineTopology.Location = new System.Drawing.Point(118, 414);
-            this.buttonOfflineTopology.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonOfflineTopology.Location = new System.Drawing.Point(157, 509);
             this.buttonOfflineTopology.Name = "buttonOfflineTopology";
-            this.buttonOfflineTopology.Size = new System.Drawing.Size(104, 28);
+            this.buttonOfflineTopology.Size = new System.Drawing.Size(139, 35);
             this.buttonOfflineTopology.TabIndex = 36;
             this.buttonOfflineTopology.Text = "Offline Topology";
             this.buttonOfflineTopology.UseVisualStyleBackColor = true;
@@ -304,10 +301,9 @@ namespace LKMAPS_Desktop
             // 
             // buttonOptions
             // 
-            this.buttonOptions.Location = new System.Drawing.Point(231, 414);
-            this.buttonOptions.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonOptions.Location = new System.Drawing.Point(308, 509);
             this.buttonOptions.Name = "buttonOptions";
-            this.buttonOptions.Size = new System.Drawing.Size(59, 28);
+            this.buttonOptions.Size = new System.Drawing.Size(79, 35);
             this.buttonOptions.TabIndex = 35;
             this.buttonOptions.Text = "Options";
             this.buttonOptions.UseVisualStyleBackColor = true;
@@ -318,11 +314,9 @@ namespace LKMAPS_Desktop
             this.groupBox2.Controls.Add(this.labelPixelSize);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.trackBarPixelSize);
-            this.groupBox2.Location = new System.Drawing.Point(8, 220);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Location = new System.Drawing.Point(11, 271);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox2.Size = new System.Drawing.Size(214, 79);
+            this.groupBox2.Size = new System.Drawing.Size(285, 97);
             this.groupBox2.TabIndex = 34;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Terrain Pixel Size";
@@ -330,20 +324,18 @@ namespace LKMAPS_Desktop
             // labelPixelSize
             // 
             this.labelPixelSize.AutoSize = true;
-            this.labelPixelSize.Location = new System.Drawing.Point(69, 53);
-            this.labelPixelSize.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelPixelSize.Location = new System.Drawing.Point(92, 65);
             this.labelPixelSize.Name = "labelPixelSize";
-            this.labelPixelSize.Size = new System.Drawing.Size(25, 13);
+            this.labelPixelSize.Size = new System.Drawing.Size(28, 16);
             this.labelPixelSize.TabIndex = 33;
             this.labelPixelSize.Text = "500";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(98, 53);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Location = new System.Drawing.Point(131, 65);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.Size = new System.Drawing.Size(48, 16);
             this.label3.TabIndex = 33;
             this.label3.Text = "meters";
             // 
@@ -351,12 +343,12 @@ namespace LKMAPS_Desktop
             // 
             this.trackBarPixelSize.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.trackBarPixelSize.LargeChange = 1;
-            this.trackBarPixelSize.Location = new System.Drawing.Point(4, 21);
+            this.trackBarPixelSize.Location = new System.Drawing.Point(5, 26);
             this.trackBarPixelSize.Margin = new System.Windows.Forms.Padding(0);
             this.trackBarPixelSize.Maximum = 50000;
             this.trackBarPixelSize.Minimum = 9000;
             this.trackBarPixelSize.Name = "trackBarPixelSize";
-            this.trackBarPixelSize.Size = new System.Drawing.Size(201, 45);
+            this.trackBarPixelSize.Size = new System.Drawing.Size(268, 56);
             this.trackBarPixelSize.TabIndex = 33;
             this.trackBarPixelSize.TickFrequency = 100;
             this.trackBarPixelSize.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
@@ -365,10 +357,9 @@ namespace LKMAPS_Desktop
             // 
             // buttonCreateTopology
             // 
-            this.buttonCreateTopology.Location = new System.Drawing.Point(8, 414);
-            this.buttonCreateTopology.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonCreateTopology.Location = new System.Drawing.Point(11, 509);
             this.buttonCreateTopology.Name = "buttonCreateTopology";
-            this.buttonCreateTopology.Size = new System.Drawing.Size(111, 28);
+            this.buttonCreateTopology.Size = new System.Drawing.Size(148, 35);
             this.buttonCreateTopology.TabIndex = 15;
             this.buttonCreateTopology.Text = "Online Topology";
             this.buttonCreateTopology.UseVisualStyleBackColor = true;
@@ -377,10 +368,10 @@ namespace LKMAPS_Desktop
             // buttonZoomUp
             // 
             this.buttonZoomUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonZoomUp.Location = new System.Drawing.Point(231, 18);
+            this.buttonZoomUp.Location = new System.Drawing.Point(308, 22);
             this.buttonZoomUp.Margin = new System.Windows.Forms.Padding(0);
             this.buttonZoomUp.Name = "buttonZoomUp";
-            this.buttonZoomUp.Size = new System.Drawing.Size(59, 31);
+            this.buttonZoomUp.Size = new System.Drawing.Size(79, 38);
             this.buttonZoomUp.TabIndex = 18;
             this.buttonZoomUp.Text = "+";
             this.buttonZoomUp.UseVisualStyleBackColor = true;
@@ -389,9 +380,10 @@ namespace LKMAPS_Desktop
             // checkBoxShowExistingMaps
             // 
             this.checkBoxShowExistingMaps.AutoSize = true;
-            this.checkBoxShowExistingMaps.Location = new System.Drawing.Point(13, 78);
+            this.checkBoxShowExistingMaps.Location = new System.Drawing.Point(17, 96);
+            this.checkBoxShowExistingMaps.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxShowExistingMaps.Name = "checkBoxShowExistingMaps";
-            this.checkBoxShowExistingMaps.Size = new System.Drawing.Size(119, 17);
+            this.checkBoxShowExistingMaps.Size = new System.Drawing.Size(147, 20);
             this.checkBoxShowExistingMaps.TabIndex = 14;
             this.checkBoxShowExistingMaps.Text = "Show existing maps";
             this.checkBoxShowExistingMaps.UseVisualStyleBackColor = true;
@@ -399,10 +391,9 @@ namespace LKMAPS_Desktop
             // 
             // buttonCreateTerrain
             // 
-            this.buttonCreateTerrain.Location = new System.Drawing.Point(10, 381);
-            this.buttonCreateTerrain.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonCreateTerrain.Location = new System.Drawing.Point(13, 468);
             this.buttonCreateTerrain.Name = "buttonCreateTerrain";
-            this.buttonCreateTerrain.Size = new System.Drawing.Size(212, 28);
+            this.buttonCreateTerrain.Size = new System.Drawing.Size(144, 35);
             this.buttonCreateTerrain.TabIndex = 13;
             this.buttonCreateTerrain.Text = "Create Terrain";
             this.buttonCreateTerrain.UseVisualStyleBackColor = true;
@@ -411,37 +402,33 @@ namespace LKMAPS_Desktop
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 50);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(13, 61);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(56, 13);
+            this.label2.Size = new System.Drawing.Size(69, 16);
             this.label2.TabIndex = 11;
             this.label2.Text = "Out Folder";
             // 
             // labelStatus
             // 
             this.labelStatus.AutoSize = true;
-            this.labelStatus.Location = new System.Drawing.Point(13, 306);
-            this.labelStatus.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelStatus.Location = new System.Drawing.Point(17, 377);
             this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(0, 13);
+            this.labelStatus.Size = new System.Drawing.Size(0, 16);
             this.labelStatus.TabIndex = 16;
             // 
             // textBoxOutFolder
             // 
-            this.textBoxOutFolder.Location = new System.Drawing.Point(71, 46);
-            this.textBoxOutFolder.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxOutFolder.Location = new System.Drawing.Point(95, 57);
             this.textBoxOutFolder.Name = "textBoxOutFolder";
-            this.textBoxOutFolder.Size = new System.Drawing.Size(122, 20);
+            this.textBoxOutFolder.Size = new System.Drawing.Size(161, 22);
             this.textBoxOutFolder.TabIndex = 10;
             this.textBoxOutFolder.TextChanged += new System.EventHandler(this.textBoxOutFolder_TextChanged);
             // 
             // buttonSelectOutFolder
             // 
-            this.buttonSelectOutFolder.Location = new System.Drawing.Point(197, 46);
-            this.buttonSelectOutFolder.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonSelectOutFolder.Location = new System.Drawing.Point(263, 57);
             this.buttonSelectOutFolder.Name = "buttonSelectOutFolder";
-            this.buttonSelectOutFolder.Size = new System.Drawing.Size(25, 19);
+            this.buttonSelectOutFolder.Size = new System.Drawing.Size(33, 23);
             this.buttonSelectOutFolder.TabIndex = 12;
             this.buttonSelectOutFolder.Text = "...";
             this.buttonSelectOutFolder.UseVisualStyleBackColor = true;
@@ -455,8 +442,7 @@ namespace LKMAPS_Desktop
             this.gmap.GrayScaleMode = false;
             this.gmap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
             this.gmap.LevelsKeepInMemmory = 5;
-            this.gmap.Location = new System.Drawing.Point(2, 0);
-            this.gmap.Margin = new System.Windows.Forms.Padding(2);
+            this.gmap.Location = new System.Drawing.Point(3, 0);
             this.gmap.MarkersEnabled = true;
             this.gmap.MaxZoom = 17;
             this.gmap.MinZoom = 1;
@@ -469,7 +455,7 @@ namespace LKMAPS_Desktop
             this.gmap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.gmap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.gmap.ShowTileGridLines = false;
-            this.gmap.Size = new System.Drawing.Size(250, 513);
+            this.gmap.Size = new System.Drawing.Size(333, 631);
             this.gmap.TabIndex = 1;
             this.gmap.Zoom = 6D;
             this.gmap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.gmap_OnMarkerClick);
@@ -505,15 +491,26 @@ namespace LKMAPS_Desktop
             // 
             this.backgroundWorkerOffline.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerOffline_DoWork);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.Location = new System.Drawing.Point(13, 13);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(395, 102);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
+            // 
             // LKMAPS_Desktop
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(823, 968);
+            this.ClientSize = new System.Drawing.Size(1097, 703);
             this.Controls.Add(this.splitContainer1);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LKMAPS_Desktop";
-            this.Text = "LKMAPS_Desktop";
+            this.Text = "LKMAPS Desktop";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LKMAPS_Desktop_FormClosing);
             this.Load += new System.EventHandler(this.LKMAPS_Desktop_Load);
             this.Resize += new System.EventHandler(this.LKMAPS_Desktop_Resize);
@@ -525,7 +522,6 @@ namespace LKMAPS_Desktop
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -533,6 +529,7 @@ namespace LKMAPS_Desktop
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPixelSize)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -576,8 +573,7 @@ namespace LKMAPS_Desktop
         private System.ComponentModel.BackgroundWorker backgroundWorkerOSM;
         private System.Windows.Forms.Button buttonOfflineTopology;
         private System.ComponentModel.BackgroundWorker backgroundWorkerOffline;
-
-
+        private System.Windows.Forms.Button CreatePbfButton;
     }
 }
 
