@@ -43,13 +43,14 @@ namespace LKMAPS_Desktop
             this.progressBarPartial = new System.Windows.Forms.ProgressBar();
             this.l = new System.Windows.Forms.Label();
             this.textBoxMapName = new System.Windows.Forms.TextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.textBoxLatMin = new System.Windows.Forms.TextBox();
             this.textBoxLatMax = new System.Windows.Forms.TextBox();
             this.textBoxLonMin = new System.Windows.Forms.TextBox();
             this.textBoxLonMax = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.CreatePbfButton = new System.Windows.Forms.Button();
+            this.HelpUtilitiesButton = new System.Windows.Forms.Button();
             this.buttonOfflineTopology = new System.Windows.Forms.Button();
             this.buttonOptions = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -70,18 +71,17 @@ namespace LKMAPS_Desktop
             this.backgroundWorkerFakeProgress = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerOSM = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerOffline = new System.ComponentModel.BackgroundWorker();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPixelSize)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -124,6 +124,7 @@ namespace LKMAPS_Desktop
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(425, 67);
             this.panel2.TabIndex = 32;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // linkLabel1
             // 
@@ -212,6 +213,17 @@ namespace LKMAPS_Desktop
             this.textBoxMapName.TabIndex = 6;
             this.textBoxMapName.TextChanged += new System.EventHandler(this.textBoxMapName_TextChanged);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.Location = new System.Drawing.Point(13, 13);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(395, 102);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 5;
+            this.pictureBox1.TabStop = false;
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.textBoxLatMin);
@@ -260,7 +272,7 @@ namespace LKMAPS_Desktop
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.CreatePbfButton);
+            this.panel1.Controls.Add(this.HelpUtilitiesButton);
             this.panel1.Controls.Add(this.buttonOfflineTopology);
             this.panel1.Controls.Add(this.buttonOptions);
             this.panel1.Controls.Add(this.groupBox2);
@@ -278,16 +290,16 @@ namespace LKMAPS_Desktop
             this.panel1.Size = new System.Drawing.Size(397, 556);
             this.panel1.TabIndex = 17;
             // 
-            // CreatePbfButton
+            // HelpUtilitiesButton
             // 
-            this.CreatePbfButton.Location = new System.Drawing.Point(157, 468);
-            this.CreatePbfButton.Margin = new System.Windows.Forms.Padding(2);
-            this.CreatePbfButton.Name = "CreatePbfButton";
-            this.CreatePbfButton.Size = new System.Drawing.Size(139, 35);
-            this.CreatePbfButton.TabIndex = 33;
-            this.CreatePbfButton.Text = "Help + Utilities";
-            this.CreatePbfButton.UseVisualStyleBackColor = true;
-            this.CreatePbfButton.Click += new System.EventHandler(this.CreatePbfButton_Click);
+            this.HelpUtilitiesButton.Location = new System.Drawing.Point(157, 468);
+            this.HelpUtilitiesButton.Margin = new System.Windows.Forms.Padding(2);
+            this.HelpUtilitiesButton.Name = "HelpUtilitiesButton";
+            this.HelpUtilitiesButton.Size = new System.Drawing.Size(139, 35);
+            this.HelpUtilitiesButton.TabIndex = 33;
+            this.HelpUtilitiesButton.Text = "Help + Utilities";
+            this.HelpUtilitiesButton.UseVisualStyleBackColor = true;
+            this.HelpUtilitiesButton.Click += new System.EventHandler(this.CreatePbfButton_Click);
             // 
             // buttonOfflineTopology
             // 
@@ -491,17 +503,6 @@ namespace LKMAPS_Desktop
             // 
             this.backgroundWorkerOffline.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerOffline_DoWork);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(13, 13);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(395, 102);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 5;
-            this.pictureBox1.TabStop = false;
-            // 
             // LKMAPS_Desktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -522,6 +523,7 @@ namespace LKMAPS_Desktop
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -529,7 +531,6 @@ namespace LKMAPS_Desktop
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPixelSize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -573,7 +574,7 @@ namespace LKMAPS_Desktop
         private System.ComponentModel.BackgroundWorker backgroundWorkerOSM;
         private System.Windows.Forms.Button buttonOfflineTopology;
         private System.ComponentModel.BackgroundWorker backgroundWorkerOffline;
-        private System.Windows.Forms.Button CreatePbfButton;
+        private System.Windows.Forms.Button HelpUtilitiesButton;
     }
 }
 

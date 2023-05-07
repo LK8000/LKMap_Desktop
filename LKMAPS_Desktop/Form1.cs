@@ -38,10 +38,9 @@ namespace LKMAPS_Desktop
         public string _roadsDetail = "Medium";
         public string _riverDetail = "Medium";
         public string _cityDetail =  "Medium";
-
         public double _lakesSize = 1;
         public double _citySize = 0.4;
-
+        public static string MapFolder = string.Empty;
         public double _simplify = 100;
 
         string _offlineOSMFile = "";
@@ -3750,6 +3749,14 @@ namespace LKMAPS_Desktop
 
         private void CreatePbfButton_Click(object sender, EventArgs e)
         {
+               using(var sr = new StreamWriter(Path.GetDirectoryName(Application.ExecutablePath) + "\\MapFolder.txt"))
+            {
+                sr.WriteLine(textBoxOutFolder.Text);
+            }
+
+            FormHelpUtilities frm =new FormHelpUtilities();
+            frm.ShowDialog();
+            return;
             string LatSouth = textBoxLatMin.Text;
             string LongWest = textBoxLonMin.Text;
             string LatNorth = textBoxLatMax.Text;
@@ -3804,6 +3811,11 @@ namespace LKMAPS_Desktop
         }
 
         private void textBoxMapName_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
         {
 
         }

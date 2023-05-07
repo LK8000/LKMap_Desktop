@@ -32,45 +32,62 @@
             this.DeleteMapDataFilesButton = new System.Windows.Forms.Button();
             this.HelpButton = new System.Windows.Forms.Button();
             this.AppDataDeleteButton = new System.Windows.Forms.Button();
+            this.ReturnToForm1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // DeleteMapDataFilesButton
             // 
-            this.DeleteMapDataFilesButton.Location = new System.Drawing.Point(48, 108);
+            this.DeleteMapDataFilesButton.Location = new System.Drawing.Point(48, 120);
             this.DeleteMapDataFilesButton.Name = "DeleteMapDataFilesButton";
-            this.DeleteMapDataFilesButton.Size = new System.Drawing.Size(180, 84);
+            this.DeleteMapDataFilesButton.Size = new System.Drawing.Size(180, 72);
             this.DeleteMapDataFilesButton.TabIndex = 3;
             this.DeleteMapDataFilesButton.Text = "Delete .OSM and .PBF Files from Map Folder";
             this.DeleteMapDataFilesButton.UseVisualStyleBackColor = true;
+            this.DeleteMapDataFilesButton.Click += new System.EventHandler(this.DeleteMapDataFilesButton_Click);
             // 
             // HelpButton
             // 
-            this.HelpButton.Location = new System.Drawing.Point(48, 36);
+            this.HelpButton.Location = new System.Drawing.Point(48, 24);
             this.HelpButton.Name = "HelpButton";
-            this.HelpButton.Size = new System.Drawing.Size(180, 36);
+            this.HelpButton.Size = new System.Drawing.Size(180, 72);
             this.HelpButton.TabIndex = 2;
-            this.HelpButton.Text = "Help";
+            this.HelpButton.Text = "Help - Coming Soon!";
             this.HelpButton.UseVisualStyleBackColor = true;
             // 
             // AppDataDeleteButton
             // 
             this.AppDataDeleteButton.Location = new System.Drawing.Point(48, 216);
             this.AppDataDeleteButton.Name = "AppDataDeleteButton";
-            this.AppDataDeleteButton.Size = new System.Drawing.Size(180, 60);
+            this.AppDataDeleteButton.Size = new System.Drawing.Size(180, 72);
             this.AppDataDeleteButton.TabIndex = 4;
             this.AppDataDeleteButton.Text = "Delete App Data Folders";
             this.AppDataDeleteButton.UseVisualStyleBackColor = true;
+            this.AppDataDeleteButton.Click += new System.EventHandler(this.AppDataDeleteButton_Click);
             // 
-            // HelpUtilities
+            // ReturnToForm1
+            // 
+            this.ReturnToForm1.BackColor = System.Drawing.Color.Red;
+            this.ReturnToForm1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReturnToForm1.ForeColor = System.Drawing.Color.White;
+            this.ReturnToForm1.Location = new System.Drawing.Point(300, 216);
+            this.ReturnToForm1.Name = "ReturnToForm1";
+            this.ReturnToForm1.Size = new System.Drawing.Size(180, 72);
+            this.ReturnToForm1.TabIndex = 5;
+            this.ReturnToForm1.Text = "Exit";
+            this.ReturnToForm1.UseVisualStyleBackColor = false;
+            this.ReturnToForm1.Click += new System.EventHandler(this.ReturnToForm1_Click);
+            // 
+            // FormHelpUtilities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(526, 321);
+            this.Controls.Add(this.ReturnToForm1);
             this.Controls.Add(this.AppDataDeleteButton);
             this.Controls.Add(this.DeleteMapDataFilesButton);
             this.Controls.Add(this.HelpButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "HelpUtilities";
+            this.Name = "FormHelpUtilities";
             this.Text = "LKMaps Desktop:- Help and Utilities";
             this.ResumeLayout(false);
 
@@ -81,5 +98,6 @@
         private System.Windows.Forms.Button DeleteMapDataFilesButton;
         private System.Windows.Forms.Button HelpButton;
         private System.Windows.Forms.Button AppDataDeleteButton;
+        private System.Windows.Forms.Button ReturnToForm1;
     }
 }

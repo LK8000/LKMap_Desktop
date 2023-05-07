@@ -134,6 +134,7 @@
     <Compile Include="Updater.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FormHelpUtilities.resx">
       <DependentUpon>FormHelpUtilities.cs</DependentUpon>
