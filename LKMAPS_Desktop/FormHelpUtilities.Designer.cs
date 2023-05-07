@@ -41,7 +41,7 @@
             this.DeleteMapDataFilesButton.Name = "DeleteMapDataFilesButton";
             this.DeleteMapDataFilesButton.Size = new System.Drawing.Size(180, 72);
             this.DeleteMapDataFilesButton.TabIndex = 3;
-            this.DeleteMapDataFilesButton.Text = "Delete .OSM and .PBF Files from Map Folder";
+            this.DeleteMapDataFilesButton.Text = "Delete  Redundant .OSM and .PBF Files from Map Ouput Folder";
             this.DeleteMapDataFilesButton.UseVisualStyleBackColor = true;
             this.DeleteMapDataFilesButton.Click += new System.EventHandler(this.DeleteMapDataFilesButton_Click);
             // 
@@ -60,7 +60,7 @@
             this.AppDataDeleteButton.Name = "AppDataDeleteButton";
             this.AppDataDeleteButton.Size = new System.Drawing.Size(180, 72);
             this.AppDataDeleteButton.TabIndex = 4;
-            this.AppDataDeleteButton.Text = "Delete App Data Folders";
+            this.AppDataDeleteButton.Text = "Purge App Data Folders";
             this.AppDataDeleteButton.UseVisualStyleBackColor = true;
             this.AppDataDeleteButton.Click += new System.EventHandler(this.AppDataDeleteButton_Click);
             // 

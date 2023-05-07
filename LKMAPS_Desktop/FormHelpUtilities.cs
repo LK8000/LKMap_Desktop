@@ -51,6 +51,7 @@ namespace LKMAPS_Desktop
                 if (!exists)
                     System.IO.Directory.CreateDirectory(_tmpFolder);
             }
+            MessageBox.Show("App Data Folders Purged Successfully");
         }
 
         private void ReturnToForm1_Click(object sender, EventArgs e)
