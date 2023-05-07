@@ -40,7 +40,6 @@ namespace LKMAPS_Desktop
         public string _cityDetail =  "Medium";
         public double _lakesSize = 1;
         public double _citySize = 0.4;
-        public static string MapFolder = string.Empty;
         public double _simplify = 100;
 
         string _offlineOSMFile = "";

@@ -90,14 +90,14 @@ namespace LKMAPS_Desktop
                 switch (n)
                 {
                     case 0:
-                MessageBox.Show("No Matching Files Found!");
+                    MessageBox.Show("No Matching Files Found!");
                         break;
                     case 1:
                     MessageBox.Show(n + " File Deleted");
                         break;
                     case int t when n > 1:
                     MessageBox.Show(n + " Files Deleted");
-                            break;
+                        break;
                 }
 
             }
