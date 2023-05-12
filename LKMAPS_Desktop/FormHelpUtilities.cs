@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
 
 namespace LKMAPS_Desktop
 {
@@ -77,14 +78,14 @@ namespace LKMAPS_Desktop
                     bool a = b.EndsWith(".PBF");
                     if (a)
                     {
-                        File.Delete(file);
+                        System.IO.File.Delete(file);                     
                         //MessageBox.Show($"{file} is deleted.");
                         n++;
                     }
                     a = b.EndsWith(".OSM");
                     if (a)
                     {
-                        File.Delete(file);
+                        System.IO.File.Delete(file);
                         //MessageBox.Show($"{file} is deleted.");
                         n++;
                     }
@@ -104,6 +105,11 @@ namespace LKMAPS_Desktop
                 }
 
             }
+        }
+
+        private void HelpButton_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(Path.GetDirectoryName(Application.ExecutablePath) + "\\Manual\\LKMaps Desktop HELP.pdf");
         }
     }
 }

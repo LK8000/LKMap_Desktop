@@ -594,10 +594,12 @@ namespace LKMAPS_Desktop
             _step = 1;  // Mosaic 
             setStatus("Mosaicing ... please wait");
             MosaicDTM(_srtmFolder, tiles, _mapName, _minLat, _minLon, _maxLat, _maxLon, _cellSize);
+            MessageBox.Show("Finished Mosaicing");
 
             _step = 2;  // map 
             setStatus("Generating map ... please wait");
             Export2DEM(_srtmFolder + _mapName + ".tif", _outFolder , _mapName + ".DEM");
+            MessageBox.Show("Finished Generating Map");
 
 
             _step = NSTEPS;

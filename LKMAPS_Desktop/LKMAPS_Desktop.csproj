@@ -161,6 +161,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="LKMAPS_Desktop-John_TemporaryKey.pfx" />
+    <None Include="Manual\LKMaps Desktop HELP.docx" />
+    <Content Include="Manual\LKMaps Desktop HELP.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
