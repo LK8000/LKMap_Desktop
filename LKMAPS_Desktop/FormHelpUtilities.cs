@@ -62,8 +62,10 @@ namespace LKMAPS_Desktop
 
         private void DeleteMapDataFilesButton_Click(object sender, EventArgs e)
         {
-            StreamReader sr = new StreamReader(Path.GetDirectoryName(Application.ExecutablePath) + "\\MapFolder.txt");
-            string MapFolder=sr.ReadLine();
+            string MapFolder = Properties.Settings.Default.OutFolder;
+            //MessageBox.Show(MapFolder);
+                //StreamReader sr = new StreamReader(Path.GetDirectoryName(Application.ExecutablePath) + "\\MapFolder.txt");
+            //string MapFolder=sr.ReadLine();
             bool exists = System.IO.Directory.Exists(MapFolder);
             if (exists)
             {

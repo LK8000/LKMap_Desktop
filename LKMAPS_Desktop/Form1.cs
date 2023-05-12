@@ -3748,10 +3748,10 @@ namespace LKMAPS_Desktop
 
         private void CreatePbfButton_Click(object sender, EventArgs e)
         {
-               using(var sr = new StreamWriter(Path.GetDirectoryName(Application.ExecutablePath) + "\\MapFolder.txt"))
-            {
-                sr.WriteLine(textBoxOutFolder.Text);
-            }
+            //using(var sr = new StreamWriter(Path.GetDirectoryName(Application.ExecutablePath) + "\\MapFolder.txt"))
+            //{
+            //    sr.WriteLine(textBoxOutFolder.Text);
+            //}
 
             FormHelpUtilities frm =new FormHelpUtilities();
             frm.ShowDialog();
