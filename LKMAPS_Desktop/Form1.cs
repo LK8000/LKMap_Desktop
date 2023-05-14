@@ -509,10 +509,55 @@ namespace LKMAPS_Desktop
             
         }
 
+        private void SaveSettings()
+        {
+            //double a1 = Convert.ToDouble(textBoxLatMax.Text);
+            //double a2 = Convert.ToDouble(textBoxLonMin.Text);
+            //double a3 = Convert.ToDouble(textBoxLatMin.Text);
+            //double a4 = Convert.ToDouble(textBoxLonMax.Text);
+            setArea(Convert.ToDouble(textBoxLatMax.Text), Convert.ToDouble(textBoxLonMin.Text), Convert.ToDouble(textBoxLatMin.Text), Convert.ToDouble(textBoxLonMax.Text));
+
+            textBoxLonMin.Text = _minLon.ToString("0.00000");
+            textBoxLonMax.Text = _maxLon.ToString("0.00000");
+            textBoxLatMin.Text = _minLat.ToString("0.00000");
+            textBoxLatMax.Text = _maxLat.ToString("0.00000");
+
+            Properties.Settings.Default.minLat = _minLat;
+            Properties.Settings.Default.minLon = _minLon;
+            Properties.Settings.Default.maxLat = _maxLat;
+            Properties.Settings.Default.maxLon = _maxLon;
+            Properties.Settings.Default.CellSize = _cellSize;
+            Properties.Settings.Default.MapName = textBoxMapName.Text;
+            Properties.Settings.Default.OutFolder = textBoxOutFolder.Text;
+            Properties.Settings.Default.ShowExistingMaps = _showExistingMaps;
+
+
+            Properties.Settings.Default.useOSMRoads = _useOSMRoads;
+            Properties.Settings.Default.useOSMRail = _useOSMRail;
+            Properties.Settings.Default.useOSMRivers = _useOSMRivers;
+            Properties.Settings.Default.useOSMRLakes = _useOSMRLakes;
+            Properties.Settings.Default.useOSMRResidential = _useOSMRResidential;
+            Properties.Settings.Default.useOSMRCity = _useOSMRCity;
+            Properties.Settings.Default.roadsDetail = _roadsDetail;
+            Properties.Settings.Default.riverDetail = _riverDetail;
+            Properties.Settings.Default.cityDetail = _cityDetail;
+            Properties.Settings.Default.lakesSize = _lakesSize;
+            Properties.Settings.Default.citySize = _citySize;
+
+            Properties.Settings.Default.simplify = _simplify;
+
+            Properties.Settings.Default.Save();
+
+
+        }
+
         private void buttonCreateTerrain_Click(object sender, EventArgs e)
         {
             enableControls(false);
-            _cellSize = Convert.ToInt32(labelPixelSize.Text);
+
+            SaveSettings();
+
+             _cellSize = Convert.ToInt32(labelPixelSize.Text);
             _outFolder = textBoxOutFolder.Text;
             _nDownloaded = 0;
 
@@ -590,17 +635,20 @@ namespace LKMAPS_Desktop
             }
             backgroundWorker1.ReportProgress(0);
 
+            FinishTime = DateTime.Now.ToString("hh:mm:ss");
 
+            //MessageBox.Show("Started Mosaicing");
             _step = 1;  // Mosaic 
             setStatus("Mosaicing ... please wait");
             MosaicDTM(_srtmFolder, tiles, _mapName, _minLat, _minLon, _maxLat, _maxLon, _cellSize);
-            MessageBox.Show("Finished Mosaicing");
+            
+              //MessageBox.Show("Finished Mosaicing");
 
             _step = 2;  // map 
+            //MessageBox.Show("Starting Generating Map");
             setStatus("Generating map ... please wait");
             Export2DEM(_srtmFolder + _mapName + ".tif", _outFolder , _mapName + ".DEM");
-            MessageBox.Show("Finished Generating Map");
-
+            //MessageBox.Show("Finished Generating Map");
 
             _step = NSTEPS;
             SetProgress(100);
@@ -611,8 +659,7 @@ namespace LKMAPS_Desktop
             enableControls(true);
 
             //MessageBox.Show("Done");
-            FinishTime = DateTime.Now.ToString("hh:mm:ss");
-            MessageBox.Show("Finished Generating " + _mapName + ".DEM Terrain File.\n\nDigital Elevation Model Data Download Time:- " + DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime)));
+             MessageBox.Show("Finished Generating " + _mapName + ".DEM Terrain File.\n\nDigital Elevation Model Data DOWNLOAD Time:- " + DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime)) + "\n\nDigital Elevation Model Data PROCESSING Time:- " + DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(FinishTime)));
 
 
         }
@@ -1261,7 +1308,8 @@ namespace LKMAPS_Desktop
 
         private void buttonCreateTopology_Click(object sender, EventArgs e)
         {
-            //string a1 =durationOSMData.ToString("hh\\:mm\\:ss");
+            SaveSettings();
+                //string a1 =durationOSMData.ToString("hh\\:mm\\:ss");
             LastActionTaken = "Download OSM Data";
             if (!checkAPIStatus())
                 return;
@@ -1269,7 +1317,7 @@ namespace LKMAPS_Desktop
             double area = (_maxLat - _minLat) * (_maxLon - _minLon);
             if (area > 15) //was 5 John Blyth
             {
-                DialogResult dialogResult = MessageBox.Show("Your area is very big and may require long to download and process\n\nPlease consider using the offline method\n\nTimeout on server is set to 1 hour\nIf you do not receive data after that time you can close the program\n\nContinue?", "Big area", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Your area is quite large and may require long to download and process.\n\nPlease consider using the offline method, which can be more efficient.\n\nThe Timeout on the server is set to 1 hour. If you do not receive data after that time you can close the program.\n\nContinue?", "Large Area Selected....", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.No)
                 {
                     return;
@@ -1364,9 +1412,10 @@ namespace LKMAPS_Desktop
 
             _step++;
 
-            //Added John Blyth 300423
+            //Reactivated John Blyth 140523
             FinishTime = DateTime.Now.ToString("hh:mm:ss");
             durationOSMData = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
+            //goto OriginalMethod1;
             char InvertedC = (char)34;
             if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm"))
             {
@@ -1386,32 +1435,44 @@ namespace LKMAPS_Desktop
             _offlineOSMFile = textBoxOutFolder.Text + "\\osm.osm.pbf";
             backgroundWorkerOffline.RunWorkerAsync();
 
+            return;
+        // Reactivated by John Blyth 140523
+        OriginalMethod1:
+           processOSM(_osmFolder + "osm.osm", _mapName,  _minLon, _minLat, _maxLon, _maxLat);
+            _step++;
 
-            // Deactivated by John Blyth 300423
-            //ProcessOSM(_osmFolder + "osm.osm", _mapName,  _minLon, _minLat, _maxLon, _maxLat);
-            //_step++;
+            stopsFakeProgress();
 
-            //stopsFakeProgress();
+            _step++;
+            processOcean(_mapName, _minLon, _minLat, _maxLon, _maxLat);
 
-            //_step++;
-            //processOcean(_mapName, _minLon, _minLat, _maxLon, _maxLat);
+            _step++;
+            createTBLFile(_mapName);
 
-            //_step++;
-            //createTBLFile(_mapName);
+            _step++;
+            //createFinalZip(_mapName, _outFolder);
+            createFinalZipNew(_mapName, _outFolder);
 
-            //_step++;
-            ////createFinalZip(_mapName, _outFolder);
-            //createFinalZipNew(_mapName, _outFolder);
-
-            //_step = NSTEPS;
+            _step = NSTEPS;
 
 
-            //enableControls(true);
+            enableControls(true);
 
-            //_step = NSTEPS;
-            //SetProgress(100);
+            _step = NSTEPS;
+            SetProgress(100);
 
             //MessageBox.Show("Finished Generating " + _mapName + " .DEM File.");
+            
+            FinishTime = DateTime.Now.ToString("hh:mm:ss");
+            TimeSpan durationOSMProcessing = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
+            if (LastActionTaken.Equals("Download OSM Data"))
+            {
+                MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "OpenStreetMap Download Time:- " + durationOSMData + "\n" + "Extracted OpenStreetMap Processing Time:- " + durationOSMProcessing);
+            }
+            else
+            {
+                MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "OpenStreetMap Extraction Time:- " + durationOSMExtraction + "\n" + "Extracted OpenStreetMap Processing Time:- " + durationOSMProcessing);
+            }
 
         }
 
@@ -2713,7 +2774,7 @@ namespace LKMAPS_Desktop
         private void createFinalZipNew(string mapName, string outFolder)
         {
 
-            setStatus("Creting LKM file ... ");
+            setStatus("Creating LKM file ... ");
 
             string startPath = _userFolder + mapName + "\\";
             string zipPath = outFolder + @"/" + mapName + ".LKM";
@@ -3842,6 +3903,8 @@ namespace LKMAPS_Desktop
 
         private void buttonOfflineTopology_Click(object sender, EventArgs e)
         {
+            SaveSettings();
+            LastActionTaken = "Offline Topology Original";
             _cellSize = Convert.ToInt32(labelPixelSize.Text);
             _outFolder = textBoxOutFolder.Text;
             _nDownloaded = 0;
@@ -3855,7 +3918,7 @@ namespace LKMAPS_Desktop
                 Directory.CreateDirectory(_userFolder + "/" + _mapName);
             }
 
-            if (MessageBox.Show("For offline processing you need to download a osm.pbf file for your area from internet\nDo you want to be redirect to the download page?", "Offline", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
+            if (MessageBox.Show("For offline processing you need to download a osm.pbf file for your area from internet.\n\nDo you want to be redirected to the download page?", "Offline Processing....", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
             {
                 System.Diagnostics.Process.Start("http://download.geofabrik.de/index.html");
                 return;
@@ -3868,9 +3931,10 @@ namespace LKMAPS_Desktop
 
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    //goto SkipJB1;
+                    goto SkipJB1;
                      //Added by John Blyth 30042023
                     char InvertedC = (char)34;
+                LastActionTaken = "Offline Topology OsmConvert";
                 StartTime = DateTime.Now.ToString("hh:mm:ss");
 
                 var command = InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + openFileDialog1.FileName + InvertedC + " -b=" + textBoxLonMin.Text + "," + textBoxLatMin.Text + "," + textBoxLonMax.Text + "," + textBoxLatMax.Text + " -o=" + InvertedC + textBoxOutFolder.Text + "\\" + textBoxMapName.Text + ".osm.pbf" + InvertedC;
@@ -3912,8 +3976,9 @@ namespace LKMAPS_Desktop
                 goto SkipHere1;
                 // End of John Blyth add
 
-               //SkipJB1:
-                _offlineOSMFile = openFileDialog1.FileName;
+               SkipJB1:
+            StartTime = DateTime.Now.ToString("hh:mm:ss");
+            _offlineOSMFile = openFileDialog1.FileName;
                 SkipHere1:
                 backgroundWorkerOffline.RunWorkerAsync();
             
@@ -3964,11 +4029,15 @@ namespace LKMAPS_Desktop
             TimeSpan durationOSMProcessing = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
            if (LastActionTaken.Equals("Download OSM Data"))
             {
-                MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "OpenStreetMap Download Time:- " + durationOSMData + "\n" + "Extracted OpenStreetMap Processing Time:- " + durationOSMProcessing);
+                MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "OpenStreetMap Download Time:- " + durationOSMData + "\n" + "Extracting the OpenStreetMap Data Took:- " + durationOSMProcessing);
             }
-            else
+            if (LastActionTaken.Equals("Offline Topology OsmConvert"))
             {
-                MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n" + "OpenStreetMap Extraction Time:- " + durationOSMExtraction + "\n" + "Extracted OpenStreetMap Processing Time:- " + durationOSMProcessing);
+                    MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "OpenStreetMap Extraction Time:- " + durationOSMExtraction + "\n" + "Extracted OpenStreetMap Processing Time:- " + durationOSMProcessing);
+            }
+            if (LastActionTaken.Equals("Offline Topology Original"))
+            {
+                    MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "Extracting the OpenStreetMap Data took:- " + durationOSMProcessing);
             }
 
         }
