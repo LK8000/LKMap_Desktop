@@ -4024,7 +4024,13 @@ namespace LKMAPS_Desktop
             _step = NSTEPS;
             SetProgress(100);
 
-            //MessageBox.Show("Done");
+            bool exists = System.IO.File.Exists(_outFolder + "\\osm.osm");
+            if (exists)
+                System.IO.File.Delete(_outFolder + "\\osm.osm");
+            exists = System.IO.File.Exists(_outFolder + "\\osm.osm.pbf");
+            if (exists)
+                System.IO.File.Delete(_outFolder + "\\osm.osm.pbf");
+
             FinishTime = DateTime.Now.ToString("hh:mm:ss");
             TimeSpan durationOSMProcessing = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
            if (LastActionTaken.Equals("Download OSM Data"))
@@ -4039,7 +4045,6 @@ namespace LKMAPS_Desktop
             {
                     MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "Extracting the OpenStreetMap Data took:- " + durationOSMProcessing);
             }
-
         }
 
         private void fixDBF_LDID(string mapName)
