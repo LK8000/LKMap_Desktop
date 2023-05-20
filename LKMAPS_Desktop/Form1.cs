@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using GMap.NET.WindowsForms;
 using GMap.NET;
-using OSGeo.OGR;
+using OSGeo.OGR;//OSGeo.OGR;
 using System.Net;
 using System.IO;
 using OSGeo.GDAL;
@@ -248,16 +248,21 @@ namespace LKMAPS_Desktop
 
 
             var gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User);
-            if (gdal_data == null)
+            string appPath2 = Path.GetDirectoryName(Application.ExecutablePath);
+            appPath2 = appPath2 + "\\gdal-data"; //var gdal_data = Path.GetDirectoryName(appPath2 + "\\GDAL_DATA");
+            if (gdal_data != appPath2)
             {
+                Environment.SetEnvironmentVariable("GDAL_DATA", null, EnvironmentVariableTarget.User);
 
                 string appPath = Path.GetDirectoryName(Application.ExecutablePath);
                 Environment.SetEnvironmentVariable("GDAL_DATA", appPath + "\\gdal-data", EnvironmentVariableTarget.User);
 
+                gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User);
                 System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
                 Application.Exit();
 
             }
+
 
 
         }
@@ -1407,9 +1412,9 @@ namespace LKMAPS_Desktop
             api_url += ");";
             api_url += "(._;>;);out;&bbox=" + bbox;
 
-
+ 
             downloadOSM(System.Uri.EscapeUriString(api_url), "osm.osm", _osmFolder);
-
+ 
             _step++;
 
             //Reactivated John Blyth 140523
@@ -1433,6 +1438,7 @@ namespace LKMAPS_Desktop
             cmd.WaitForExit();
 
             _offlineOSMFile = textBoxOutFolder.Text + "\\osm.osm.pbf";
+
             backgroundWorkerOffline.RunWorkerAsync();
 
             return;
@@ -1479,6 +1485,7 @@ namespace LKMAPS_Desktop
         private void processOSM(string osmFile, string mapName,double minLon, double minLat, double maxLon, double maxLat)
         {
             // Configure OGR
+            var gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User);
             string encoding = "UTF-8";
             Gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES");
             Gdal.SetConfigOption("OSM_COMPRESS_NODES", "YES");
@@ -1491,7 +1498,6 @@ namespace LKMAPS_Desktop
 
 
             Ogr.RegisterAll();
-
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -3999,6 +4005,7 @@ namespace LKMAPS_Desktop
 
 
             _step++;
+
             processOSM(_offlineOSMFile, _mapName, _minLon, _minLat, _maxLon, _maxLat);
             _step++;
 

@@ -45,6 +45,10 @@ namespace LKMAPS_Desktop
             this.textBoxMapName = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Longitude2Label = new System.Windows.Forms.Label();
+            this.Logitude1Label = new System.Windows.Forms.Label();
+            this.Latitude2Label = new System.Windows.Forms.Label();
+            this.Latitude1label = new System.Windows.Forms.Label();
             this.textBoxLatMin = new System.Windows.Forms.TextBox();
             this.textBoxLatMax = new System.Windows.Forms.TextBox();
             this.textBoxLonMin = new System.Windows.Forms.TextBox();
@@ -71,6 +75,7 @@ namespace LKMAPS_Desktop
             this.backgroundWorkerFakeProgress = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerOSM = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorkerOffline = new System.ComponentModel.BackgroundWorker();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -112,7 +117,7 @@ namespace LKMAPS_Desktop
             // 
             this.splitContainer1.Panel2.Controls.Add(this.gmap);
             this.splitContainer1.Size = new System.Drawing.Size(1509, 1054);
-            this.splitContainer1.SplitterDistance = 583;
+            this.splitContainer1.SplitterDistance = 581;
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -124,7 +129,7 @@ namespace LKMAPS_Desktop
             this.panel2.Location = new System.Drawing.Point(0, 954);
             this.panel2.Margin = new System.Windows.Forms.Padding(6);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(583, 100);
+            this.panel2.Size = new System.Drawing.Size(581, 100);
             this.panel2.TabIndex = 32;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
@@ -232,6 +237,10 @@ namespace LKMAPS_Desktop
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.Longitude2Label);
+            this.groupBox1.Controls.Add(this.Logitude1Label);
+            this.groupBox1.Controls.Add(this.Latitude2Label);
+            this.groupBox1.Controls.Add(this.Latitude1label);
             this.groupBox1.Controls.Add(this.textBoxLatMin);
             this.groupBox1.Controls.Add(this.textBoxLatMax);
             this.groupBox1.Controls.Add(this.textBoxLonMin);
@@ -245,9 +254,45 @@ namespace LKMAPS_Desktop
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Map Area";
             // 
+            // Longitude2Label
+            // 
+            this.Longitude2Label.AutoSize = true;
+            this.Longitude2Label.Location = new System.Drawing.Point(264, 72);
+            this.Longitude2Label.Name = "Longitude2Label";
+            this.Longitude2Label.Size = new System.Drawing.Size(114, 25);
+            this.Longitude2Label.TabIndex = 37;
+            this.Longitude2Label.Text = "Longitude 2";
+            // 
+            // Logitude1Label
+            // 
+            this.Logitude1Label.AutoSize = true;
+            this.Logitude1Label.Location = new System.Drawing.Point(0, 72);
+            this.Logitude1Label.Name = "Logitude1Label";
+            this.Logitude1Label.Size = new System.Drawing.Size(114, 25);
+            this.Logitude1Label.TabIndex = 34;
+            this.Logitude1Label.Text = "Longitude 1";
+            // 
+            // Latitude2Label
+            // 
+            this.Latitude2Label.AutoSize = true;
+            this.Latitude2Label.Location = new System.Drawing.Point(144, 132);
+            this.Latitude2Label.Name = "Latitude2Label";
+            this.Latitude2Label.Size = new System.Drawing.Size(97, 25);
+            this.Latitude2Label.TabIndex = 37;
+            this.Latitude2Label.Text = "Latitude 2";
+            // 
+            // Latitude1label
+            // 
+            this.Latitude1label.AutoSize = true;
+            this.Latitude1label.Location = new System.Drawing.Point(144, 12);
+            this.Latitude1label.Name = "Latitude1label";
+            this.Latitude1label.Size = new System.Drawing.Size(97, 25);
+            this.Latitude1label.TabIndex = 33;
+            this.Latitude1label.Text = "Latitude 1";
+            // 
             // textBoxLatMin
             // 
-            this.textBoxLatMin.Location = new System.Drawing.Point(125, 144);
+            this.textBoxLatMin.Location = new System.Drawing.Point(125, 156);
             this.textBoxLatMin.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxLatMin.Name = "textBoxLatMin";
             this.textBoxLatMin.Size = new System.Drawing.Size(136, 29);
@@ -274,7 +319,7 @@ namespace LKMAPS_Desktop
             // 
             // textBoxLonMax
             // 
-            this.textBoxLonMax.Location = new System.Drawing.Point(227, 96);
+            this.textBoxLonMax.Location = new System.Drawing.Point(240, 96);
             this.textBoxLonMax.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxLonMax.Name = "textBoxLonMax";
             this.textBoxLonMax.Size = new System.Drawing.Size(136, 29);
@@ -528,11 +573,21 @@ namespace LKMAPS_Desktop
             // 
             this.backgroundWorkerOffline.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerOffline_DoWork);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(64, 25);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "label1";
+            // 
             // LKMAPS_Desktop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1509, 1054);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -558,6 +613,7 @@ namespace LKMAPS_Desktop
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarPixelSize)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -601,6 +657,11 @@ namespace LKMAPS_Desktop
         private System.Windows.Forms.Button buttonOfflineTopology;
         private System.ComponentModel.BackgroundWorker backgroundWorkerOffline;
         private System.Windows.Forms.Button HelpUtilitiesButton;
+        private System.Windows.Forms.Label Longitude2Label;
+        private System.Windows.Forms.Label Logitude1Label;
+        private System.Windows.Forms.Label Latitude2Label;
+        private System.Windows.Forms.Label Latitude1label;
+        private System.Windows.Forms.Label label1;
     }
 }
 
