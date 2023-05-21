@@ -522,12 +522,13 @@ namespace LKMAPS_Desktop
             this.gmap.EmptyTileColor = System.Drawing.Color.Navy;
             this.gmap.GrayScaleMode = false;
             this.gmap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.gmap.LevelsKeepInMemmory = 5;
+            this.gmap.LevelsKeepInMemory = 5;
             this.gmap.Location = new System.Drawing.Point(4, 0);
             this.gmap.Margin = new System.Windows.Forms.Padding(4);
             this.gmap.MarkersEnabled = true;
             this.gmap.MaxZoom = 17;
             this.gmap.MinZoom = 1;
+            this.gmap.MouseWheelZoomEnabled = true;
             this.gmap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
             this.gmap.Name = "gmap";
             this.gmap.NegativeMode = false;

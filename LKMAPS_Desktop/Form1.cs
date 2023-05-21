@@ -108,7 +108,7 @@ namespace LKMAPS_Desktop
             exists = System.IO.Directory.Exists(_tmpFolder);
             if (!exists)
                 System.IO.Directory.CreateDirectory(_tmpFolder);
-            
+            GdalConfiguration.ConfigureGdal();
         }
 
         public void enableControls(bool enable)
@@ -247,22 +247,18 @@ namespace LKMAPS_Desktop
             linkLabel1.Links.Add(link);
 
 
-            var gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User);
-            string appPath2 = Path.GetDirectoryName(Application.ExecutablePath);
-            appPath2 = appPath2 + "\\gdal-data"; //var gdal_data = Path.GetDirectoryName(appPath2 + "\\GDAL_DATA");
-            if (gdal_data != appPath2)
+            var gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User); //Remove no longer need Environmental Variable GDAL_DATA
+            if (gdal_data != null)
             {
+
+                //string appPath = Path.GetDirectoryName(Application.ExecutablePath);
+                //Environment.SetEnvironmentVariable("GDAL_DATA", appPath + "\\gdal-data", EnvironmentVariableTarget.User);
                 Environment.SetEnvironmentVariable("GDAL_DATA", null, EnvironmentVariableTarget.User);
 
-                string appPath = Path.GetDirectoryName(Application.ExecutablePath);
-                Environment.SetEnvironmentVariable("GDAL_DATA", appPath + "\\gdal-data", EnvironmentVariableTarget.User);
-
-                gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User);
-                System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
-                Application.Exit();
+                // System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+                // Application.Exit();
 
             }
-
 
 
         }
@@ -1322,7 +1318,7 @@ namespace LKMAPS_Desktop
             double area = (_maxLat - _minLat) * (_maxLon - _minLon);
             if (area > 15) //was 5 John Blyth
             {
-                DialogResult dialogResult = MessageBox.Show("Your area is quite large and may require long to download and process.\n\nPlease consider using the offline method, which can be more efficient.\n\nThe Timeout on the server is set to 1 hour. If you do not receive data after that time you can close the program.\n\nContinue?", "Large Area Selected....", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Your area is quite large and may require long to download and process.\n\nPlease consider using the offline method, which may be more efficient for very large areas.\n\nThe Timeout on the server is set to 1 hour. If you do not receive data after that time you can close the program.\n\nContinue?", "Large Area Selected....", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.No)
                 {
                     return;
@@ -1417,10 +1413,11 @@ namespace LKMAPS_Desktop
  
             _step++;
 
-            //Reactivated John Blyth 140523
+            //Reactivated John Blyth 210523
             FinishTime = DateTime.Now.ToString("hh:mm:ss");
             durationOSMData = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
-            //goto OriginalMethod1;
+            if (LastActionTaken == "Download OSM Data")
+                goto OriginalMethod1;
             char InvertedC = (char)34;
             if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm"))
             {
@@ -1485,19 +1482,20 @@ namespace LKMAPS_Desktop
         private void processOSM(string osmFile, string mapName,double minLon, double minLat, double maxLon, double maxLat)
         {
             // Configure OGR
-            var gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User);
+            //var gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User);
             string encoding = "UTF-8";
-            Gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES");
-            Gdal.SetConfigOption("OSM_COMPRESS_NODES", "YES");
-            Gdal.SetConfigOption("CPL_TMPDIR", _tmpFolder);
-            Gdal.SetConfigOption("OSM_MAX_TMPFILE_SIZE", "0");
-            //Gdal.SetConfigOption("SHAPE_ENCODING", "ISO-8859-1");
-            OSGeo.GDAL.Gdal.SetConfigOption("GDAL_FILENAME_IS_UTF8", "YES");
-            Gdal.SetConfigOption("SHAPE_ENCODING", "UTF-8");
-            Gdal.SetConfigOption("ENCODING", "UTF-8");
+            //Gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES");
+            //Gdal.SetConfigOption("OSM_COMPRESS_NODES", "YES");
+            //Gdal.SetConfigOption("CPL_TMPDIR", _tmpFolder);
+            //Gdal.SetConfigOption("OSM_MAX_TMPFILE_SIZE", "0");
+            ////Gdal.SetConfigOption("SHAPE_ENCODING", "ISO-8859-1");
+            //OSGeo.GDAL.Gdal.SetConfigOption("GDAL_FILENAME_IS_UTF8", "YES");
+            //Gdal.SetConfigOption("SHAPE_ENCODING", "UTF-8");
+            //Gdal.SetConfigOption("ENCODING", "UTF-8");
 
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -2479,7 +2477,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing Ocean .. ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -2575,7 +2574,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing City points .. ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -2685,7 +2685,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing City areas .. ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -2867,7 +2868,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing City points .. ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -2988,7 +2990,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing City areas .. ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -3074,7 +3077,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing Ocean .. ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -3160,7 +3164,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing Lakes .. ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -3258,7 +3263,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing Rivers .. ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -3349,7 +3355,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing Roads .. ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -3486,7 +3493,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing Lakes ... ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -3546,7 +3554,8 @@ namespace LKMAPS_Desktop
         {
             setStatus("Processing Rivers ... ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -3666,7 +3675,8 @@ namespace LKMAPS_Desktop
 
             setStatus("Processing roads ... ");
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
             srs.ImportFromEPSG(4326);
@@ -3917,7 +3927,7 @@ namespace LKMAPS_Desktop
             _mapName = textBoxMapName.Text;
             if (File.Exists(_outFolder + "\\" + _mapName + ".osm.pbf"))
             {
-                goto SkipPickingFile;
+                //goto SkipPickingFile;
             }
             if (!Directory.Exists(_userFolder + "/" + _mapName))
             {
@@ -3935,48 +3945,53 @@ namespace LKMAPS_Desktop
             openFileDialog1.FilterIndex = 2;
             openFileDialog1.RestoreDirectory = true;
 
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    goto SkipJB1;
-                     //Added by John Blyth 30042023
-                    char InvertedC = (char)34;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //goto SkipJB1;
+                //Added by John Blyth 30042023
+                char InvertedC = (char)34;
                 LastActionTaken = "Offline Topology OsmConvert";
                 StartTime = DateTime.Now.ToString("hh:mm:ss");
 
                 var command = InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + openFileDialog1.FileName + InvertedC + " -b=" + textBoxLonMin.Text + "," + textBoxLatMin.Text + "," + textBoxLonMax.Text + "," + textBoxLatMax.Text + " -o=" + InvertedC + textBoxOutFolder.Text + "\\" + textBoxMapName.Text + ".osm.pbf" + InvertedC;
-                    //using (var sr = new StreamWriter(textBoxOutFolder.Text + "\\LastRun.bat"))
-                    //{
-                    //    sr.WriteLine(command);
-                   // }
-                    System.Diagnostics.ProcessStartInfo cmdsi = new ProcessStartInfo(command);
-                    //cmdsi.WindowStyle = ProcessWindowStyle.Maximized;
-                    cmdsi.CreateNoWindow = true;
-                    cmdsi.RedirectStandardOutput = true;
-                    cmdsi.UseShellExecute = false;
-                    var cmd = Process.Start(cmdsi);
-                    int i = 0;
-                    while (!cmd.HasExited)
+                //using (var sr = new StreamWriter(textBoxOutFolder.Text + "\\LastRun.bat"))
+                //{
+                //   sr.WriteLine(command);
+                // }
+                System.Diagnostics.ProcessStartInfo cmdsi = new ProcessStartInfo(command);
+                //cmdsi.WindowStyle = ProcessWindowStyle.Maximized;
+                cmdsi.CreateNoWindow = true;
+                cmdsi.RedirectStandardOutput = true;
+                cmdsi.UseShellExecute = false;
+                var cmd = Process.Start(cmdsi);
+                int i = 0;
+                while (!cmd.HasExited)
+                {
+                    //i++;
+                    if (i > 100)
                     {
-                        //i++;
-                        if (i > 100)
-                        {
-                            i = 0;
-                        }
-                        if (!cmd.HasExited)
-                        {
-                        FinishTime = DateTime.Now.ToString("hh:mm:ss");
-                            durationOSMExtraction = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
-                            labelStatus.Text = "Extracting:- may take up to 5 minutes " + durationOSMExtraction;
-                            labelStatus.Refresh();
-                            progressBarPartial.Value = Math.Min(i, 100);
-                            progressBarPartial.Refresh();
-                        }
-                        i += 10;
-                        Thread.Sleep(1000);
+                        i = 0;
                     }
+                    if (!cmd.HasExited)
+                    {
+                        FinishTime = DateTime.Now.ToString("hh:mm:ss");
+                        durationOSMExtraction = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
+                        labelStatus.Text = "Extracting:- may take up to 5 minutes " + durationOSMExtraction;
+                        labelStatus.Refresh();
+                        progressBarPartial.Value = Math.Min(i, 100);
+                        progressBarPartial.Refresh();
+                    }
+                    i += 10;
+                    Thread.Sleep(1000);
+                }
                 //var output = cmd.StandardOutput.ReadToEnd();
                 //cmd.WaitForExit();
-               }
+            }
+            else
+            {
+                MessageBox.Show("No Offline .OSM.PBF OpenStreetMap Topology File Selected.\n\nPlease try again.");
+                return;
+            }
             SkipPickingFile:
             _offlineOSMFile =textBoxOutFolder.Text + "\\" + textBoxMapName.Text + ".osm.pbf";
                 goto SkipHere1;
@@ -4034,9 +4049,9 @@ namespace LKMAPS_Desktop
             bool exists = System.IO.File.Exists(_outFolder + "\\osm.osm");
             if (exists)
                 System.IO.File.Delete(_outFolder + "\\osm.osm");
-            exists = System.IO.File.Exists(_outFolder + "\\osm.osm.pbf");
+            exists = System.IO.File.Exists(_outFolder + "\\" + _mapName + ".osm.pbf");
             if (exists)
-                System.IO.File.Delete(_outFolder + "\\osm.osm.pbf");
+                System.IO.File.Delete(_outFolder + "\\" + _mapName +".osm.pbf");
 
             FinishTime = DateTime.Now.ToString("hh:mm:ss");
             TimeSpan durationOSMProcessing = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));

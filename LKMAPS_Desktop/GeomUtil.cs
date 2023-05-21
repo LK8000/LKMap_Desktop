@@ -15,7 +15,8 @@ namespace LKMAPS_Desktop
             List<String> ret = new List<String>();
             string appPath = Path.GetDirectoryName(Application.ExecutablePath);
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             DataSource ds1 = Ogr.Open("/vsizip/" + appPath + "/data.zip/index/srtm30.shp", 0);
 
             if (ds1 == null)
@@ -74,7 +75,8 @@ namespace LKMAPS_Desktop
              List<String> ret = new  List<String>();
              string appPath = Path.GetDirectoryName(Application.ExecutablePath);
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             DataSource ds1;
             if (true)
             {
@@ -136,7 +138,8 @@ namespace LKMAPS_Desktop
             double lon = (minLon + maxLon) / 2;
             string appPath = Path.GetDirectoryName(Application.ExecutablePath);
 
-            Ogr.RegisterAll();
+            //Ogr.RegisterAll();
+            OSGeo.OGR.Ogr.RegisterAll();
             DataSource ds1 = Ogr.Open("/vsizip/" + appPath + "/data.zip/index/vmap0.shp", 0);
 
             if (ds1 == null)
