@@ -38,19 +38,20 @@
             // DeleteMapDataFilesButton
             // 
             this.DeleteMapDataFilesButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.DeleteMapDataFilesButton.Location = new System.Drawing.Point(36, 180);
+            this.DeleteMapDataFilesButton.Location = new System.Drawing.Point(0, 180);
             this.DeleteMapDataFilesButton.Margin = new System.Windows.Forms.Padding(4);
             this.DeleteMapDataFilesButton.Name = "DeleteMapDataFilesButton";
             this.DeleteMapDataFilesButton.Size = new System.Drawing.Size(248, 108);
             this.DeleteMapDataFilesButton.TabIndex = 3;
             this.DeleteMapDataFilesButton.Text = "Delete  Redundant .OSM and .PBF Files from Map Output Folder";
             this.DeleteMapDataFilesButton.UseVisualStyleBackColor = false;
+            this.DeleteMapDataFilesButton.Visible = false;
             this.DeleteMapDataFilesButton.Click += new System.EventHandler(this.DeleteMapDataFilesButton_Click);
             // 
             // HelpButton
             // 
             this.HelpButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.HelpButton.Location = new System.Drawing.Point(36, 36);
+            this.HelpButton.Location = new System.Drawing.Point(216, 36);
             this.HelpButton.Margin = new System.Windows.Forms.Padding(4);
             this.HelpButton.Name = "HelpButton";
             this.HelpButton.Size = new System.Drawing.Size(248, 108);
@@ -62,7 +63,7 @@
             // AppDataDeleteButton
             // 
             this.AppDataDeleteButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.AppDataDeleteButton.Location = new System.Drawing.Point(36, 336);
+            this.AppDataDeleteButton.Location = new System.Drawing.Point(216, 180);
             this.AppDataDeleteButton.Margin = new System.Windows.Forms.Padding(4);
             this.AppDataDeleteButton.Name = "AppDataDeleteButton";
             this.AppDataDeleteButton.Size = new System.Drawing.Size(248, 108);
@@ -76,7 +77,7 @@
             this.ReturnToForm1.BackColor = System.Drawing.Color.Red;
             this.ReturnToForm1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ReturnToForm1.ForeColor = System.Drawing.Color.White;
-            this.ReturnToForm1.Location = new System.Drawing.Point(420, 336);
+            this.ReturnToForm1.Location = new System.Drawing.Point(216, 336);
             this.ReturnToForm1.Margin = new System.Windows.Forms.Padding(4);
             this.ReturnToForm1.Name = "ReturnToForm1";
             this.ReturnToForm1.Size = new System.Drawing.Size(248, 108);
