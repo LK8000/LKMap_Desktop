@@ -1419,16 +1419,16 @@ namespace LKMAPS_Desktop
             //if (LastActionTaken == "Download OSM Data")
             //    goto OriginalMethod1;
             char InvertedC = (char)34;
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm"))
-            {
+            //if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm"))
+            //{
                 //File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm", textBoxOutFolder.Text + "\\osm.osm", true);
-            }
+            //}
             //var command = InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + textBoxOutFolder.Text + "\\osm.osm" + InvertedC + " -o=" + InvertedC + textBoxOutFolder.Text + "\\osm.osm.pbf" + InvertedC;
             var command = InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm" + InvertedC + " -o=" + InvertedC + Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMaps\\osm\\osm.osm.pbf" + InvertedC;
-            using (var sr = new StreamWriter(textBoxOutFolder.Text + "\\LastRun.bat"))
-            {
-               sr.WriteLine(command);
-             }
+            //using (var sr = new StreamWriter(textBoxOutFolder.Text + "\\LastRun.bat"))
+           // {
+            //   sr.WriteLine(command);
+            // }
             //MessageBox.Show(command);
             System.Diagnostics.ProcessStartInfo cmdsi = new ProcessStartInfo(command);
             //cmdsi.WindowStyle = ProcessWindowStyle.Hidden;
