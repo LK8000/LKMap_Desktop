@@ -20,6 +20,8 @@ using System.Globalization;
 using System.Threading;
 using System.IO.Compression;
 using System.Security.Cryptography;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Linq.Expressions;
 
 namespace LKMAPS_Desktop
 {
@@ -1338,8 +1340,8 @@ namespace LKMAPS_Desktop
 
             //backgroundWorkerLKM.RunWorkerAsync();
 
+            trackBar1.Visible = false;
             backgroundWorkerOSM.RunWorkerAsync();
-
 
         }
 
@@ -1535,7 +1537,7 @@ namespace LKMAPS_Desktop
             lyr_roadsmall_line.CreateField(fld_level, 0);
             createCPG(_userFolder + mapName + @"\roadsmall_line.cpg", encoding);
 
-            // RAILROAS
+            // RAILROADS
             DataSource railroad_line = drv.CreateDataSource(_userFolder + mapName + @"\railroad_line.shp", null);
             Layer lyr_railroad_line = railroad_line.CreateLayer("railroad_line", srs, wkbGeometryType.wkbLineString, null);
             lyr_railroad_line.CreateField(fld_level, 0);
@@ -1608,216 +1610,227 @@ namespace LKMAPS_Desktop
                     Feature feat;
                     OSGeo.OGR.Feature nf = null;
 
-                    while ((feat = OGRLayer.GetNextFeature()) != null)
+                    try
                     {
-                        bHasLayersNonEmpty = true;
 
-                        try
+
+                        while ((feat = OGRLayer.GetNextFeature()) != null)
                         {
-                            Geometry geom = feat.GetGeometryRef();
+                            bHasLayersNonEmpty = true;
 
-                            if (!geom.Within(poly))
-                                continue;
-
-                            name = feat.GetFieldAsString("name");
-
-//                            string faultyStr = Encoding.Default.GetString(Encoding.UTF8.GetBytes(name));
-//                            name = faultyStr;
-
-                            switch (iLayer)
+                            try
                             {
-                                case 0:
-                                    nPoints++;
-                                    if (nPoints % 10000 == 0)
-                                    {
-                                        TimeSpan OSMWorking = DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(StartTime));
-                                        setStatus("Processing POINTS ... (" + Convert.ToString(nPoints) + ") " + OSMWorking);
-                                    }
+                                Geometry geom = feat.GetGeometryRef();
 
-                                    place = feat.GetFieldAsString("place");
-                                    tags = feat.GetFieldAsString("other_tags");
+                                if (!geom.Within(poly))
+                                    continue;
 
-                                    if (_useOSMRCity)
-                                    {
-                                        if (place == "city")
-                                        {
-                                            nf = new Feature(lyr_citybig_point.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly));
-                                            nf.SetField(0, name);
-                                            lyr_citybig_point.CreateFeature(nf);
-                                        }
-                                        if (place == "town" && (_cityDetail == "VeyHigh" || _cityDetail == "High" || _cityDetail == "Medium"))
-                                        {
-                                            nf = new Feature(lyr_citymedium_point.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly));
-                                            nf.SetField(0, name);
-                                            lyr_citymedium_point.CreateFeature(nf);
-                                        }
-                                        if (place == "town" && (_cityDetail == "Low"))
-                                        {
-                                            nf = new Feature(lyr_citysmall_point.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly));
-                                            nf.SetField(0, name);
-                                            lyr_citysmall_point.CreateFeature(nf);
-                                        }
-                                        if (place == "village" && _cityDetail == "VeyHigh")
-                                        {
-                                            nf = new Feature(lyr_citysmall_point.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly));
-                                            nf.SetField(0, name);
-                                            lyr_citysmall_point.CreateFeature(nf);
-                                        }
-                                        if (place == "village" && _cityDetail == "High")
-                                        {
-                                            nf = new Feature(lyr_cityverysmall_point.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly));
-                                            nf.SetField(0, name);
-                                            lyr_cityverysmall_point.CreateFeature(nf);
-                                        }
-                                        nf = null;
-                                    }
-                                    break;
-                                case 1:
-                                    nLines++;
-                                    if (nLines % 10000 == 0)
-                                    {
-                                        TimeSpan OSMWorking = DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(StartTime));
-                                        setStatus("Processing LINES ... (" + Convert.ToString(nLines) + ") " + OSMWorking);
-                                    }
-                                    //SetProgress((int)(cf * 100.0 / totF));
+                                name = feat.GetFieldAsString("name");
 
-                                    highway = feat.GetFieldAsString("highway");
-                                    waterway = feat.GetFieldAsString("waterway");
-                                    tags = feat.GetFieldAsString("other_tags");
+                                //                            string faultyStr = Encoding.Default.GetString(Encoding.UTF8.GetBytes(name));
+                                //                            name = faultyStr;
 
-                                    if (_useOSMRoads)
-                                    {
-                                        if (highway == "motorway" || highway == "trunk")
+                                switch (iLayer)
+                                {
+                                    case 0:
+                                        nPoints++;
+                                        if (nPoints % 10000 == 0)
                                         {
-                                            nf = new Feature(lyr_roadbig_line.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
-                                            nf.SetField(0, highway);
-                                            lyr_roadbig_line.CreateFeature(nf);
-                                        }
-                                        if ( highway == "primary"   )
-                                        {
-                                            nf = new Feature(lyr_roadmedium_line.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
-                                            nf.SetField(0, highway);
-                                            lyr_roadmedium_line.CreateFeature(nf);
-                                        }
-                                        if (highway == "secondary" && (_roadsDetail == "High" || _roadsDetail == "VeyHigh"))
-                                        {
-                                            nf = new Feature(lyr_roadsmall_line.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
-                                            nf.SetField(0, highway);
-                                            lyr_roadsmall_line.CreateFeature(nf);
-                                        }
-                                        if (highway == "tertiary" && (_roadsDetail == "VeyHigh"))
-                                        {
-                                            nf = new Feature(lyr_roadsmall_line.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
-                                            nf.SetField(0, highway);
-                                            lyr_roadsmall_line.CreateFeature(nf);
+                                            TimeSpan OSMWorking = DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(StartTime));
+                                            setStatus("Processing POINTS ... (" + Convert.ToString(nPoints) + ") " + OSMWorking);
                                         }
 
+                                        place = feat.GetFieldAsString("place");
+                                        tags = feat.GetFieldAsString("other_tags");
 
-                                    }
-
-                                    if (_useOSMRail)
-                                    {
-                                        if (tags.Contains("\"railway\"=>\"rail\""))
+                                        if (_useOSMRCity)
                                         {
-                                            nf = new Feature(lyr_railroad_line.GetLayerDefn());
-                                            nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
-                                            nf.SetField(0, name);
-                                            lyr_railroad_line.CreateFeature(nf);
-                                        }
-                                    }
-
-                                    if (_useOSMRivers)
-                                    {
-                                        if (waterway == "river")
-                                        {
+                                            if (place == "city")
                                             {
-                                                nf = new Feature(lyr_water_line.GetLayerDefn());
+                                                nf = new Feature(lyr_citybig_point.GetLayerDefn());
+                                                nf.SetGeometry(geom.Intersection(poly));
+                                                nf.SetField(0, name);
+                                                lyr_citybig_point.CreateFeature(nf);
+                                            }
+                                            if (place == "town" && (_cityDetail == "VeyHigh" || _cityDetail == "High" || _cityDetail == "Medium"))
+                                            {
+                                                nf = new Feature(lyr_citymedium_point.GetLayerDefn());
+                                                nf.SetGeometry(geom.Intersection(poly));
+                                                nf.SetField(0, name);
+                                                lyr_citymedium_point.CreateFeature(nf);
+                                            }
+                                            if (place == "town" && (_cityDetail == "Low"))
+                                            {
+                                                nf = new Feature(lyr_citysmall_point.GetLayerDefn());
+                                                nf.SetGeometry(geom.Intersection(poly));
+                                                nf.SetField(0, name);
+                                                lyr_citysmall_point.CreateFeature(nf);
+                                            }
+                                            if (place == "village" && _cityDetail == "VeyHigh")
+                                            {
+                                                nf = new Feature(lyr_citysmall_point.GetLayerDefn());
+                                                nf.SetGeometry(geom.Intersection(poly));
+                                                nf.SetField(0, name);
+                                                lyr_citysmall_point.CreateFeature(nf);
+                                            }
+                                            if (place == "village" && _cityDetail == "High")
+                                            {
+                                                nf = new Feature(lyr_cityverysmall_point.GetLayerDefn());
+                                                nf.SetGeometry(geom.Intersection(poly));
+                                                nf.SetField(0, name);
+                                                lyr_cityverysmall_point.CreateFeature(nf);
+                                            }
+                                            nf = null;
+                                        }
+                                        break;
+                                    case 1:
+                                        nLines++;
+                                        if (nLines % 10000 == 0)
+                                        {
+                                            TimeSpan OSMWorking = DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(StartTime));
+                                            setStatus("Processing LINES ... (" + Convert.ToString(nLines) + ") " + OSMWorking);
+                                        }
+                                        //SetProgress((int)(cf * 100.0 / totF));
+
+                                        highway = feat.GetFieldAsString("highway");
+                                        waterway = feat.GetFieldAsString("waterway");
+                                        tags = feat.GetFieldAsString("other_tags");
+
+                                        if (_useOSMRoads)
+                                        {
+                                            if (highway == "motorway" || highway == "trunk")
+                                            {
+                                                nf = new Feature(lyr_roadbig_line.GetLayerDefn());
                                                 nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
-                                                nf.SetField(0, "");
-                                                lyr_water_line.CreateFeature(nf);
+                                                nf.SetField(0, highway);
+                                                lyr_roadbig_line.CreateFeature(nf);
+                                            }
+                                            if (highway == "primary")
+                                            {
+                                                nf = new Feature(lyr_roadmedium_line.GetLayerDefn());
+                                                nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
+                                                nf.SetField(0, highway);
+                                                lyr_roadmedium_line.CreateFeature(nf);
+                                            }
+                                            if (highway == "secondary" && (_roadsDetail == "High" || _roadsDetail == "VeyHigh"))
+                                            {
+                                                nf = new Feature(lyr_roadsmall_line.GetLayerDefn());
+                                                nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
+                                                nf.SetField(0, highway);
+                                                lyr_roadsmall_line.CreateFeature(nf);
+                                            }
+                                            if (highway == "tertiary" && (_roadsDetail == "VeyHigh"))
+                                            {
+                                                nf = new Feature(lyr_roadsmall_line.GetLayerDefn());
+                                                nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
+                                                nf.SetField(0, highway);
+                                                lyr_roadsmall_line.CreateFeature(nf);
+                                            }
+
+
+                                        }
+
+                                        if (_useOSMRail)
+                                        {
+                                            if (tags.Contains("\"railway\"=>\"rail\""))
+                                            {
+                                                nf = new Feature(lyr_railroad_line.GetLayerDefn());
+                                                nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
+                                                nf.SetField(0, name);
+                                                lyr_railroad_line.CreateFeature(nf);
                                             }
                                         }
-                                    }
-                                    break;
-                                case 2:
-                                    nMultilines++;
-                                    if (nMultilines % 10000 == 0)
-                                        setStatus("Processing Multilines ... (" + Convert.ToString(nMultilines) + ")");
-                                    break;
-                                case 3:
-                                    nPolys++;
-                                    if (nPolys % 10000 == 0)
-                                        setStatus("Processing POLYGON ... (" + Convert.ToString(nPolys) + ")");
 
-                                    landuse = feat.GetFieldAsString("landuse");
-                                    natural = feat.GetFieldAsString("natural");
-                                    tags = feat.GetFieldAsString("other_tags");
-
-                                    if (_useOSMRResidential)
-                                    {
-                                        if (landuse == "residential")
+                                        if (_useOSMRivers)
                                         {
-                                            double area = geom.Area() * 12379.77;
-                                            if (area > _citySize)
+                                            if (waterway == "river")
                                             {
-                                                try
                                                 {
-                                                    nf = new Feature(lyr_city_area.GetLayerDefn());
-                                                    nf.SetGeometry(geom.Simplify(_simplify / (3600 * 30)));
-                                                    nf.SetField(0, name);
-                                                    nf.SetField(1, area);
-                                                    lyr_city_area.CreateFeature(nf);
-                                                }
-                                                catch
-                                                {
-                                                }
-
-                                            }
-                                        }
-                                    }
-
-                                    if (_useOSMRLakes)
-                                    {
-                                        if (natural == "water")
-                                        {
-                                            double area = geom.Area() * 12379.77;
-                                            if (area > _lakesSize)
-                                            {
-                                                try
-                                                {
-                                                    nf = new Feature(lyr_water_area.GetLayerDefn());
+                                                    nf = new Feature(lyr_water_line.GetLayerDefn());
                                                     nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
-                                                    nf.SetField(0, name);
-                                                    nf.SetField(1, area);
-                                                    lyr_water_area.CreateFeature(nf);
+                                                    nf.SetField(0, "");
+                                                    lyr_water_line.CreateFeature(nf);
                                                 }
-                                                catch
+                                            }
+                                        }
+                                        break;
+                                    case 2:
+                                        nMultilines++;
+                                        if (nMultilines % 10000 == 0)
+                                            setStatus("Processing Multilines ... (" + Convert.ToString(nMultilines) + ")");
+                                        break;
+                                    case 3:
+                                        nPolys++;
+                                        if (nPolys % 10000 == 0)
+                                            setStatus("Processing POLYGON ... (" + Convert.ToString(nPolys) + ")");
+
+                                        landuse = feat.GetFieldAsString("landuse");
+                                        natural = feat.GetFieldAsString("natural");
+                                        tags = feat.GetFieldAsString("other_tags");
+
+                                        if (_useOSMRResidential)
+                                        {
+                                            if (landuse == "residential")
+                                            {
+                                                double area = geom.Area() * 12379.77;
+                                                if (area > _citySize)
                                                 {
+                                                    try
+                                                    {
+                                                        nf = new Feature(lyr_city_area.GetLayerDefn());
+                                                        nf.SetGeometry(geom.Simplify(_simplify / (3600 * 30)));
+                                                        nf.SetField(0, name);
+                                                        nf.SetField(1, area);
+                                                        lyr_city_area.CreateFeature(nf);
+                                                    }
+                                                    catch
+                                                    {
+                                                    }
+
                                                 }
                                             }
                                         }
 
-                                    }
-                                    break;
+                                        if (_useOSMRLakes)
+                                        {
+                                            if (natural == "water")
+                                            {
+                                                double area = geom.Area() * 12379.77;
+                                                if (area > _lakesSize)
+                                                {
+                                                    try
+                                                    {
+                                                        nf = new Feature(lyr_water_area.GetLayerDefn());
+                                                        nf.SetGeometry(geom.Intersection(poly).SimplifyPreserveTopology(_simplify / (3600 * 30)));
+                                                        nf.SetField(0, name);
+                                                        nf.SetField(1, area);
+                                                        lyr_water_area.CreateFeature(nf);
+                                                    }
+                                                    catch
+                                                    {
+                                                    }
+                                                }
+                                            }
+
+                                        }
+                                        break;
+                                }
+                            }
+                            catch
+                            {
+
                             }
                         }
-                        catch
-                        {
-
-                        }
                     }
- 
+                    catch
+                    {
+                        MessageBox.Show("Sorry, an unavoidable GDAL Processing Error has occurred. Please RESTART your computer and try again.\n\nIf the problem persists, please log an issue on the LKMaps Desktop's GitHub page.");
+                        System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
+                        Application.Exit();
+                    }
                 }
-            } while (bHasLayersNonEmpty);
+            }
+                while (bHasLayersNonEmpty);
 
 
 
@@ -3782,9 +3795,7 @@ namespace LKMAPS_Desktop
 
         private void downloadOSM(string api_url, string filename,string destFolder)
         {
-            setStatus("Querying OpenStreetMap data. This could take > 30 minutes.");
-
-
+            setStatus("Getting OpenStreetMap data. This could take > 15 minutes.");
 
             var wreq = WebRequest.Create(api_url);
             wreq.Timeout = Timeout.Infinite;
@@ -4055,6 +4066,8 @@ namespace LKMAPS_Desktop
 
             enableControls(true);
 
+            trackBar1.Visible = true;
+
             _step = NSTEPS;
             SetProgress(100);
 
@@ -4064,12 +4077,12 @@ namespace LKMAPS_Desktop
             //exists = System.IO.File.Exists(_outFolder + "\\*.osm.pbf");
             //if (exists)
             //    System.IO.File.Delete(_outFolder + "\\*.osm.pbf");
-            bool exists = System.IO.File.Exists(Environment.SpecialFolder.LocalApplicationData + "\\LKMAPS\\osm\\osm.osm");
+            bool exists = System.IO.File.Exists(_userFolder + "osm\\osm.osm");
             if (exists)
-                //System.IO.File.Delete(Environment.SpecialFolder.LocalApplicationData + "\\LKMAPS\\osm\\osm.osm");
-            exists = System.IO.File.Exists(Environment.SpecialFolder.LocalApplicationData + "\\LKMAPS\\osm\\osm.osm.pbf");
+                //System.IO.File.Delete(_userFolder + "\\osm\\osm.osm");
+                exists = System.IO.File.Exists(_userFolder + "osm\\osm.osm.pbf");
             if (exists)
-                System.IO.File.Delete(Environment.SpecialFolder.LocalApplicationData + "\\LKMAPS\\osm\\osm.osm.pbf");
+                System.IO.File.Delete(_userFolder + "osm\\osm.osm.pbf");
 
             FinishTime = DateTime.Now.ToString("hh:mm:ss");
             TimeSpan durationOSMProcessing = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
