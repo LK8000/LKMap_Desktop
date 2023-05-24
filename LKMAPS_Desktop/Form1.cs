@@ -1340,7 +1340,6 @@ namespace LKMAPS_Desktop
 
             //backgroundWorkerLKM.RunWorkerAsync();
 
-            trackBar1.Visible = false;
             backgroundWorkerOSM.RunWorkerAsync();
 
         }
@@ -1410,10 +1409,9 @@ namespace LKMAPS_Desktop
             api_url += ");";
             api_url += "(._;>;);out;&bbox=" + bbox;
 
- 
             downloadOSM(System.Uri.EscapeUriString(api_url), "osm.osm", _osmFolder);
- 
-            _step++;
+
+             _step++;
 
             //Reactivated John Blyth 210523
             FinishTime = DateTime.Now.ToString("hh:mm:ss");
@@ -1493,14 +1491,14 @@ namespace LKMAPS_Desktop
             // Configure OGR
             //var gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User);
             string encoding = "UTF-8";
-            //Gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES");
-            //Gdal.SetConfigOption("OSM_COMPRESS_NODES", "YES");
-            //Gdal.SetConfigOption("CPL_TMPDIR", _tmpFolder);
-            //Gdal.SetConfigOption("OSM_MAX_TMPFILE_SIZE", "0");
+            Gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES");
+            Gdal.SetConfigOption("OSM_COMPRESS_NODES", "YES");
+            Gdal.SetConfigOption("CPL_TMPDIR", _tmpFolder);
+            Gdal.SetConfigOption("OSM_MAX_TMPFILE_SIZE", "0");
             ////Gdal.SetConfigOption("SHAPE_ENCODING", "ISO-8859-1");
-            //OSGeo.GDAL.Gdal.SetConfigOption("GDAL_FILENAME_IS_UTF8", "YES");
-            //Gdal.SetConfigOption("SHAPE_ENCODING", "UTF-8");
-            //Gdal.SetConfigOption("ENCODING", "UTF-8");
+            OSGeo.GDAL.Gdal.SetConfigOption("GDAL_FILENAME_IS_UTF8", "YES");
+            Gdal.SetConfigOption("SHAPE_ENCODING", "UTF-8");
+            Gdal.SetConfigOption("ENCODING", "UTF-8");
 
 
             //Ogr.RegisterAll();
@@ -1609,12 +1607,11 @@ namespace LKMAPS_Desktop
 
                     Feature feat;
                     OSGeo.OGR.Feature nf = null;
-
                     try
                     {
 
 
-                        while ((feat = OGRLayer.GetNextFeature()) != null)
+                    while ((feat = OGRLayer.GetNextFeature()) != null)
                         {
                             bHasLayersNonEmpty = true;
 
@@ -1762,7 +1759,10 @@ namespace LKMAPS_Desktop
                                     case 3:
                                         nPolys++;
                                         if (nPolys % 10000 == 0)
-                                            setStatus("Processing POLYGON ... (" + Convert.ToString(nPolys) + ")");
+                                        {
+                                            TimeSpan OSMWorking = DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(StartTime));
+                                            setStatus("Processing POLYGON ... (" + Convert.ToString(nPolys) + ") " + OSMWorking);
+                                        }
 
                                         landuse = feat.GetFieldAsString("landuse");
                                         natural = feat.GetFieldAsString("natural");
@@ -1824,7 +1824,7 @@ namespace LKMAPS_Desktop
                     }
                     catch
                     {
-                        MessageBox.Show("Sorry, an unavoidable GDAL Processing Error has occurred. Please RESTART your computer and try again.\n\nIf the problem persists, please log an issue on the LKMaps Desktop's GitHub page.");
+                        MessageBox.Show("Sorry, a fatal GDAL Processing Error has occurred. Please RESTART your computer and try again.\n\nIf the problem persists, please log an issue on the LKMaps Desktop's GitHub page.");
                         System.Diagnostics.Process.Start(Application.ExecutablePath); // to start new instance of application
                         Application.Exit();
                     }
@@ -3795,7 +3795,7 @@ namespace LKMAPS_Desktop
 
         private void downloadOSM(string api_url, string filename,string destFolder)
         {
-            setStatus("Getting OpenStreetMap data. This could take > 15 minutes.");
+            setStatus("Getting OSM data - may take > 15 minutes.");
 
             var wreq = WebRequest.Create(api_url);
             wreq.Timeout = Timeout.Infinite;
@@ -4047,7 +4047,7 @@ namespace LKMAPS_Desktop
             processOSM(_offlineOSMFile, _mapName, _minLon, _minLat, _maxLon, _maxLat);
             _step++;
 
-            fixDBF_LDID(_mapName); 
+            fixDBF_LDID(_mapName);
 
             stopsFakeProgress();
 
@@ -4065,8 +4065,6 @@ namespace LKMAPS_Desktop
 
 
             enableControls(true);
-
-            trackBar1.Visible = true;
 
             _step = NSTEPS;
             SetProgress(100);
@@ -4086,19 +4084,19 @@ namespace LKMAPS_Desktop
 
             FinishTime = DateTime.Now.ToString("hh:mm:ss");
             TimeSpan durationOSMProcessing = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
-           if (LastActionTaken.Equals("Download OSM Data"))
+            if (LastActionTaken.Equals("Download OSM Data"))
             {
                 MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "OpenStreetMap Download Time:- " + durationOSMData + "\n" + "Extracting the OpenStreetMap Data Took:- " + durationOSMProcessing);
             }
             if (LastActionTaken.Equals("Offline Topology OsmConvert"))
             {
-                    MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "OpenStreetMap Extraction Time:- " + durationOSMExtraction + "\n" + "Extracted OpenStreetMap Processing Time:- " + durationOSMProcessing);
+                MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "OpenStreetMap Extraction Time:- " + durationOSMExtraction + "\n" + "Extracted OpenStreetMap Processing Time:- " + durationOSMProcessing);
             }
             if (LastActionTaken.Equals("Offline Topology Original"))
             {
-                    MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "Extracting the OpenStreetMap Data took:- " + durationOSMProcessing);
+                MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "Extracting the OpenStreetMap Data took:- " + durationOSMProcessing);
             }
-        }
+         }
 
         private void fixDBF_LDID(string mapName)
         {
