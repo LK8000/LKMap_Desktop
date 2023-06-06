@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright The LKMap Desktop Project
+
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;

@@ -1,4 +1,7 @@
-﻿namespace LKMAPS_Desktop
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright The LKMap Desktop Project
+
+namespace LKMAPS_Desktop
 {
     partial class FormHelpUtilities
     {

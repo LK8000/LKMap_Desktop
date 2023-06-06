@@ -1,4 +1,7 @@
-﻿namespace LKMAPS_Desktop.Properties {
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright The LKMap Desktop Project
+
+namespace LKMAPS_Desktop.Properties {
     
     
     // This class allows you to handle specific events on the settings class:
