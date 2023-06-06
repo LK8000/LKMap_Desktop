@@ -68,7 +68,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -192,7 +192,6 @@
     <None Include="data.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="LKMAPS_Desktop-John_TemporaryKey.pfx" />
     <None Include="Manual\LKMaps Desktop HELP.docx" />
     <Content Include="Manual\LKMaps Desktop HELP.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
