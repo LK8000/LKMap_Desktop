@@ -2,14 +2,8 @@
 // Copyright The LKMap Desktop Project
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace LKMAPS_Desktop
 {
@@ -40,7 +34,7 @@ namespace LKMAPS_Desktop
             comboBoxuseOSMRivers.Text = mainForm._riverDetail;
 
             checkBoxuseOSMRLakes.Checked = mainForm._useOSMRLakes;
-            textBoxninLakesSize.Text = mainForm._lakesSize.ToString("0.0",CultureInfo.InvariantCulture);
+            textBoxninLakesSize.Text = mainForm._lakesSize.ToString("0.0", CultureInfo.InvariantCulture);
 
             checkBoxuseOSMRCity.Checked = mainForm._useOSMRCity;
             comboBoxOSMRCity.Text = mainForm._cityDetail;
@@ -50,7 +44,7 @@ namespace LKMAPS_Desktop
 
             textBoxSimplification.Text = mainForm._simplify.ToString("0.0", CultureInfo.InvariantCulture);
 
-            
+
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -69,7 +63,7 @@ namespace LKMAPS_Desktop
             mainForm._useOSMRCity = checkBoxuseOSMRCity.Checked;
             mainForm._cityDetail = comboBoxOSMRCity.Text;
 
-            mainForm._useOSMRResidential = checkBoxuseOSMRResidential.Checked  ;
+            mainForm._useOSMRResidential = checkBoxuseOSMRResidential.Checked;
             mainForm._citySize = double.Parse(textBoxCitySize.Text, CultureInfo.InvariantCulture);
 
             mainForm._simplify = double.Parse(textBoxSimplification.Text, CultureInfo.InvariantCulture);

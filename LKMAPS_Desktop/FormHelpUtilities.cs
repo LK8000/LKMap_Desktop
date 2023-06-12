@@ -1,21 +1,9 @@
 ﻿// SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright The LKMap Desktop Project
 
-using Microsoft.SqlServer.Server;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
 
 namespace LKMAPS_Desktop
 {
@@ -68,7 +56,7 @@ namespace LKMAPS_Desktop
         {
             string MapFolder = Properties.Settings.Default.OutFolder;
             //MessageBox.Show(MapFolder);
-                //StreamReader sr = new StreamReader(Path.GetDirectoryName(Application.ExecutablePath) + "\\MapFolder.txt");
+            //StreamReader sr = new StreamReader(Path.GetDirectoryName(Application.ExecutablePath) + "\\MapFolder.txt");
             //string MapFolder=sr.ReadLine();
             bool exists = System.IO.Directory.Exists(MapFolder);
             if (exists)
@@ -81,7 +69,7 @@ namespace LKMAPS_Desktop
                     bool a = b.EndsWith(".PBF");
                     if (a)
                     {
-                        System.IO.File.Delete(file);                     
+                        System.IO.File.Delete(file);
                         //MessageBox.Show($"{file} is deleted.");
                         n++;
                     }
@@ -97,13 +85,13 @@ namespace LKMAPS_Desktop
                 switch (n)
                 {
                     case 0:
-                    MessageBox.Show("No Matching Files Found!");
+                        MessageBox.Show("No Matching Files Found!");
                         break;
                     case 1:
-                    MessageBox.Show(n + " File Deleted");
+                        MessageBox.Show(n + " File Deleted");
                         break;
                     case int t when n > 1:
-                    MessageBox.Show(n + " Files Deleted");
+                        MessageBox.Show(n + " Files Deleted");
                         break;
                 }
 

@@ -2,9 +2,9 @@
 // Copyright The LKMap Desktop Project
 
 using System;
-using System.Text;
-using System.Net;
 using System.Collections.Specialized;
+using System.Net;
+using System.Text;
 
 namespace LKMAPS_Desktop
 {
@@ -13,13 +13,13 @@ namespace LKMAPS_Desktop
         public static bool downloadSRTM(String tile, String destFolder)
         {
             string remoteUri = "ftp://srtm.csi.cgiar.org/SRTM_v41/SRTM_Data_GeoTIFF/";
-            string fileName = tile + ".zip" , myStringWebResource = null;
+            string fileName = tile + ".zip", myStringWebResource = null;
             WebClient myWebClient = new WebClient();
             myStringWebResource = remoteUri + fileName;
             // Download the Web resource and save it into the current filesystem folder.
-            myWebClient.DownloadFile(myStringWebResource, destFolder + "/" + fileName);		
-            
-  
+            myWebClient.DownloadFile(myStringWebResource, destFolder + "/" + fileName);
+
+
             return true;
         }
     }

@@ -2,15 +2,15 @@
 // Copyright The LKMap Desktop Project
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Windows.Forms;
-using System.ComponentModel;
 
 namespace LKMAPS_Desktop
 {
-    public    class Updater
+    public class Updater
     {
         private LKMAPS_Desktop form;
 
@@ -19,9 +19,9 @@ namespace LKMAPS_Desktop
             this.form = form;
         }
 
-        public  bool checkUpdate()
+        public bool checkUpdate()
         {
-            
+
             try
             {
                 System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -72,13 +72,13 @@ namespace LKMAPS_Desktop
         {
             double bytesIn = double.Parse(e.BytesReceived.ToString());
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
-            int percentage = (int) ( bytesIn / totalBytes * 100 );
+            int percentage = (int)(bytesIn / totalBytes * 100);
 
             form.SetProgressDownload(percentage);
 
 
         }
-        void  client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace LKMAPS_Desktop
             }
             catch
             {
-                MessageBox.Show("Error updating .... sorry" );
+                MessageBox.Show("Error updating .... sorry");
                 form.enableControls(true);
             }
         }

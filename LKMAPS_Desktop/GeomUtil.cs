@@ -1,11 +1,11 @@
 ﻿// SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright The LKMap Desktop Project
 
+using OSGeo.OGR;
 using System;
 using System.Collections.Generic;
-using OSGeo.OGR;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace LKMAPS_Desktop
 {
@@ -31,7 +31,7 @@ namespace LKMAPS_Desktop
 
             //Layer layer = ds1.GetLayerByName("features");
 
-            
+
 
             if (layer == null)
             {
@@ -73,8 +73,8 @@ namespace LKMAPS_Desktop
 
         public static List<String> getSRTM90Tiles(double latmin, double lonmin, double latmax, double lonmax)
         {
-             List<String> ret = new  List<String>();
-             string appPath = Path.GetDirectoryName(Application.ExecutablePath);
+            List<String> ret = new List<String>();
+            string appPath = Path.GetDirectoryName(Application.ExecutablePath);
 
             //Ogr.RegisterAll();
             OSGeo.OGR.Ogr.RegisterAll();
@@ -107,14 +107,14 @@ namespace LKMAPS_Desktop
             layer.ResetReading();
 
             OSGeo.OGR.Geometry ring = new OSGeo.OGR.Geometry(OSGeo.OGR.wkbGeometryType.wkbLinearRing);
-            ring.AddPoint(lonmin,latmin,0);
-            ring.AddPoint(lonmin,latmax,0);
-            ring.AddPoint(lonmax,latmax,0);
-            ring.AddPoint(lonmax,latmin,0);
-            ring.AddPoint(lonmin,latmin,0);
+            ring.AddPoint(lonmin, latmin, 0);
+            ring.AddPoint(lonmin, latmax, 0);
+            ring.AddPoint(lonmax, latmax, 0);
+            ring.AddPoint(lonmax, latmin, 0);
+            ring.AddPoint(lonmin, latmin, 0);
             OSGeo.OGR.Geometry poly = new OSGeo.OGR.Geometry(OSGeo.OGR.wkbGeometryType.wkbPolygon);
             poly.AddGeometry(ring);
-             
+
 
             while ((f = layer.GetNextFeature()) != null)
             {
@@ -170,10 +170,10 @@ namespace LKMAPS_Desktop
                 var geom = f.GetGeometryRef();
                 if (geom != null)
                 {
-                    if (   geom.Contains(p) )
+                    if (geom.Contains(p))
                     {
                         return f.GetFieldAsString(1);
-                        
+
                     }
                 }
             }

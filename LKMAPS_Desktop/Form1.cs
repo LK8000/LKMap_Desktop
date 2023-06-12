@@ -1,30 +1,23 @@
 ﻿// SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright The LKMap Desktop Project
 
+using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
+using OSGeo.GDAL;
+using OSGeo.OGR;//OSGeo.OGR;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using GMap.NET.WindowsForms;
-using GMap.NET;
-using OSGeo.OGR;//OSGeo.OGR;
-using System.Net;
-using System.IO;
-using OSGeo.GDAL;
-using System.Collections.Specialized;
 using System.Diagnostics;
-using GMap.NET.WindowsForms.Markers;
-using GMap.NET.WindowsForms.ToolTips;
+using System.Drawing;
 using System.Globalization;
-using System.Threading;
+using System.IO;
 using System.IO.Compression;
-using System.Security.Cryptography;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Linq.Expressions;
+using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace LKMAPS_Desktop
 {
@@ -42,7 +35,7 @@ namespace LKMAPS_Desktop
 
         public string _roadsDetail = "Medium";
         public string _riverDetail = "Medium";
-        public string _cityDetail =  "Medium";
+        public string _cityDetail = "Medium";
         public double _lakesSize = 1;
         public double _citySize = 0.4;
         public double _simplify = 100;
@@ -64,14 +57,14 @@ namespace LKMAPS_Desktop
         private bool downloadComplete = false;
         long bytes_total = 0;
         String _labelStatusText = "";
-        String _userFolder ;
+        String _userFolder;
         String _srtmFolder;
         String _osmFolder;
         string _tmpFolder;
         string _vmapFolder;
         String _outFolder;
         bool _showExistingMaps = true;
-        
+
         double _minWaterArea = 451230;
         bool _fakeProcess = false;
 
@@ -83,11 +76,11 @@ namespace LKMAPS_Desktop
         string LastActionTaken = "";
         public LKMAPS_Desktop()
         {
-            
+
             InitializeComponent();
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 
-            
+
             _userFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\";
             bool exists = System.IO.Directory.Exists(_userFolder);
             //if (exists) 
@@ -124,7 +117,7 @@ namespace LKMAPS_Desktop
                 foreach (Control ctrl in this.Controls)
                 {
                     ctrl.Enabled = enable;
-                }            
+                }
             }
             ));
         }
@@ -139,12 +132,12 @@ namespace LKMAPS_Desktop
 
         }
 
-        public void enableControls_notread(bool enable )
+        public void enableControls_notread(bool enable)
         {
             foreach (Control ctrl in this.Controls)
             {
                 ctrl.Enabled = enable;
-            }            
+            }
         }
 
 
@@ -166,7 +159,7 @@ namespace LKMAPS_Desktop
             richTextBoxHelp.Text += "Right mouse : Pan \n";
             richTextBoxHelp.Text += "Wheel : zoom\n";
             richTextBoxHelp.Text += "\n";
-            richTextBoxHelp.Text += "LKMAPS version " +  version + " Tonino Tarsi & Others - 2023\n" ;
+            richTextBoxHelp.Text += "LKMAPS version " + version + " Tonino Tarsi & Others - 2023\n";
             //richTextBoxHelp.Text += "\n";
             richTextBoxHelp.Text += "OpenStreetMap data is distributed under Open Database License\n";
             richTextBoxHelp.Text += "Terrain is from public domain SRTM data\n";
@@ -191,7 +184,7 @@ namespace LKMAPS_Desktop
             if (_cellSize > 500) _cellSize = 500;
 
             labelPixelSize.Text = _cellSize.ToString("00");
-            trackBarPixelSize.Value = _cellSize  * 100;
+            trackBarPixelSize.Value = _cellSize * 100;
 
             _outFolder = Properties.Settings.Default.OutFolder;
             textBoxOutFolder.Text = _outFolder;
@@ -237,13 +230,13 @@ namespace LKMAPS_Desktop
             trackBarPixelSize.Minimum = 90 * 100;
             trackBarPixelSize.Maximum = 500 * 100;
             trackBarPixelSize.TickFrequency = 1000;
-            
+
 
             gmap.Zoom = 6;
 
             Splash sp = new Splash();
             sp.TopMost = true;
-            sp.StartPosition = FormStartPosition.CenterScreen;;
+            sp.StartPosition = FormStartPosition.CenterScreen; ;
             sp.Show();
 
             // Add a link to the LinkLabel.
@@ -331,7 +324,7 @@ namespace LKMAPS_Desktop
             if (e.Button != System.Windows.Forms.MouseButtons.Left)
                 return;
 
-            if ( _running )
+            if (_running)
                 return;
 
             PointLatLng p = gmap.FromLocalToLatLng(e.X, e.Y);
@@ -358,7 +351,7 @@ namespace LKMAPS_Desktop
                     }
                     break;
 
-            }   
+            }
         }
 
         private void UpdateMapArea()
@@ -379,7 +372,7 @@ namespace LKMAPS_Desktop
                 case 1:
                     break;
 
-            }   
+            }
 
         }
 
@@ -408,7 +401,7 @@ namespace LKMAPS_Desktop
 
                     break;
 
-            }   
+            }
         }
 
         private void textBoxLatMax_TextChanged(object sender, EventArgs e)
@@ -478,7 +471,7 @@ namespace LKMAPS_Desktop
 
                 if (result == DialogResult.OK && !String.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    textBoxOutFolder.Text =  fbd.SelectedPath;
+                    textBoxOutFolder.Text = fbd.SelectedPath;
                     updateCurrentMapsOverlay();
                 }
             }
@@ -496,23 +489,23 @@ namespace LKMAPS_Desktop
             Properties.Settings.Default.ShowExistingMaps = _showExistingMaps;
 
 
-            Properties.Settings.Default.useOSMRoads 	=	_useOSMRoads  	;
-            Properties.Settings.Default.useOSMRail 	=	_useOSMRail  	;
-            Properties.Settings.Default.useOSMRivers 	=	_useOSMRivers  	;
-            Properties.Settings.Default.useOSMRLakes 	=	_useOSMRLakes  	;
-            Properties.Settings.Default.useOSMRResidential 	=	_useOSMRResidential  	;
-            Properties.Settings.Default.useOSMRCity 	=	_useOSMRCity  	;
-            Properties.Settings.Default.roadsDetail 	=	_roadsDetail  	;
-            Properties.Settings.Default.riverDetail 	=	_riverDetail  	;
-            Properties.Settings.Default.cityDetail 	=	_cityDetail  	;
-            Properties.Settings.Default.lakesSize 	=	_lakesSize  	;
-            Properties.Settings.Default.citySize	=	_citySize 	;
+            Properties.Settings.Default.useOSMRoads = _useOSMRoads;
+            Properties.Settings.Default.useOSMRail = _useOSMRail;
+            Properties.Settings.Default.useOSMRivers = _useOSMRivers;
+            Properties.Settings.Default.useOSMRLakes = _useOSMRLakes;
+            Properties.Settings.Default.useOSMRResidential = _useOSMRResidential;
+            Properties.Settings.Default.useOSMRCity = _useOSMRCity;
+            Properties.Settings.Default.roadsDetail = _roadsDetail;
+            Properties.Settings.Default.riverDetail = _riverDetail;
+            Properties.Settings.Default.cityDetail = _cityDetail;
+            Properties.Settings.Default.lakesSize = _lakesSize;
+            Properties.Settings.Default.citySize = _citySize;
 
             Properties.Settings.Default.simplify = _simplify;
 
             Properties.Settings.Default.Save();
 
-            
+
         }
 
         private void SaveSettings()
@@ -563,7 +556,7 @@ namespace LKMAPS_Desktop
 
             SaveSettings();
 
-             _cellSize = Convert.ToInt32(labelPixelSize.Text);
+            _cellSize = Convert.ToInt32(labelPixelSize.Text);
             _outFolder = textBoxOutFolder.Text;
             _nDownloaded = 0;
 
@@ -576,7 +569,7 @@ namespace LKMAPS_Desktop
 
             _mapName = textBoxMapName.Text;
 
-            backgroundWorker1.RunWorkerCompleted += worker_RunWorkerCompleted; 
+            backgroundWorker1.RunWorkerCompleted += worker_RunWorkerCompleted;
 
 
             backgroundWorker1.RunWorkerAsync();
@@ -594,7 +587,7 @@ namespace LKMAPS_Desktop
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            
+
 
             _step = 0; // Download SRTM
 
@@ -615,7 +608,7 @@ namespace LKMAPS_Desktop
 
             foreach (String t in download_tiles)
             {
-                setStatus("Downloading " + t); 
+                setStatus("Downloading " + t);
                 backgroundWorker1.ReportProgress(5);
                 downloadComplete = false;
                 if (_cellSize < 90)
@@ -629,7 +622,7 @@ namespace LKMAPS_Desktop
                     {
                         tiles.Add(steTmp);
                     }
-                    
+
                 }
 
 
@@ -647,13 +640,13 @@ namespace LKMAPS_Desktop
             _step = 1;  // Mosaic 
             setStatus("Mosaicing ... please wait");
             MosaicDTM(_srtmFolder, tiles, _mapName, _minLat, _minLon, _maxLat, _maxLon, _cellSize);
-            
-              //MessageBox.Show("Finished Mosaicing");
+
+            //MessageBox.Show("Finished Mosaicing");
 
             _step = 2;  // map 
             //MessageBox.Show("Starting Generating Map");
             setStatus("Generating map ... please wait");
-            Export2DEM(_srtmFolder + _mapName + ".tif", _outFolder , _mapName + ".DEM");
+            Export2DEM(_srtmFolder + _mapName + ".tif", _outFolder, _mapName + ".DEM");
             //MessageBox.Show("Finished Generating Map");
 
             _step = NSTEPS;
@@ -665,15 +658,15 @@ namespace LKMAPS_Desktop
             enableControls(true);
 
             //MessageBox.Show("Done");
-             MessageBox.Show("Finished Generating " + _mapName + ".DEM Terrain File.\n\nDigital Elevation Model Data DOWNLOAD Time:- " + DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime)) + "\n\nDigital Elevation Model Data PROCESSING Time:- " + DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(FinishTime)));
+            MessageBox.Show("Finished Generating " + _mapName + ".DEM Terrain File.\n\nDigital Elevation Model Data DOWNLOAD Time:- " + DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime)) + "\n\nDigital Elevation Model Data PROCESSING Time:- " + DateTime.Parse(DateTime.Now.ToString("hh:mm:ss")).Subtract(DateTime.Parse(FinishTime)));
 
 
         }
 
-        private void Export2DEM(string tiff_file, String outFolder, string mapName )
+        private void Export2DEM(string tiff_file, String outFolder, string mapName)
         {
-            BinaryWriter writer = new BinaryWriter(File.Open(outFolder + "/" + mapName , FileMode.Create));
-            
+            BinaryWriter writer = new BinaryWriter(File.Open(outFolder + "/" + mapName, FileMode.Create));
+
             Gdal.AllRegister();
             Dataset ds = Gdal.Open(tiff_file, Access.GA_ReadOnly);
             Band ba = ds.GetRasterBand(1);
@@ -692,9 +685,9 @@ namespace LKMAPS_Desktop
             Columns = (uint)ds.RasterXSize;
             Rows = (uint)ds.RasterYSize;
 
-            
-            Left  = geotransform[0];
-            Top   = geotransform[3];
+
+            Left = geotransform[0];
+            Top = geotransform[3];
             Right = geotransform[0] + Columns * geotransform[1];
             Bottom = geotransform[3] + Rows * geotransform[5];
             StepSize = geotransform[1];
@@ -725,38 +718,38 @@ namespace LKMAPS_Desktop
             }
 
 
- /*           short[] data = new short[Rows];
-            for (int c = 0; c < Columns; c++)
-            {
-                SetProgress((int)(c * 100.0 / Columns));
+            /*           short[] data = new short[Rows];
+                       for (int c = 0; c < Columns; c++)
+                       {
+                           SetProgress((int)(c * 100.0 / Columns));
 
-                ba.ReadRaster(c, 0, 1, (int)Rows, data, 1, (int)Rows, 0, 0);
-                for (int i = 0; i < Rows; i++)
-                {
-                    ushort pix = (ushort)data[i];
-                    writer.Write(pix);
-                }
-            }
-   */           
+                           ba.ReadRaster(c, 0, 1, (int)Rows, data, 1, (int)Rows, 0, 0);
+                           for (int i = 0; i < Rows; i++)
+                           {
+                               ushort pix = (ushort)data[i];
+                               writer.Write(pix);
+                           }
+                       }
+              */
 
-/*            short[] data = new short[Columns * Rows];
-            ba.ReadRaster(0, 0, (int)Columns, (int)Rows, data, (int)Columns, (int)Rows, 0, 0);
+            /*            short[] data = new short[Columns * Rows];
+                        ba.ReadRaster(0, 0, (int)Columns, (int)Rows, data, (int)Columns, (int)Rows, 0, 0);
 
-            for (int i = 0; i < Columns; i++)
-	        {
-                SetProgress( (int) ( i * 100.0 / Columns));
-                for (int j = 0; j < Rows; j++)
-                {
-                    ushort pix = (ushort)data[i * Rows + j];
-                    writer.Write(pix);
-                }
-	        }
-*/
+                        for (int i = 0; i < Columns; i++)
+                        {
+                            SetProgress( (int) ( i * 100.0 / Columns));
+                            for (int j = 0; j < Rows; j++)
+                            {
+                                ushort pix = (ushort)data[i * Rows + j];
+                                writer.Write(pix);
+                            }
+                        }
+            */
 
 
             writer.Close();
             ba.FlushCache();
-	        ds.FlushCache();
+            ds.FlushCache();
             ds.Dispose();
             ds = null;
             ba = null;
@@ -777,18 +770,18 @@ namespace LKMAPS_Desktop
                 File.Delete(srtmFolder + mapName + ".tif");
             }
 
-            Dataset t_ds = drv.Create(srtmFolder+mapName+".tif", w, h, 1, DataType.GDT_UInt16,null);
+            Dataset t_ds = drv.Create(srtmFolder + mapName + ".tif", w, h, 1, DataType.GDT_UInt16, null);
             Band t_ba = t_ds.GetRasterBand(1);
 
-          
+
             double[] t_geotransform = new double[6];
-            t_geotransform[0] = ulx ;/* top left x */
-            t_geotransform[1] = cx ;/* w-e pixel resolution */
+            t_geotransform[0] = ulx;/* top left x */
+            t_geotransform[1] = cx;/* w-e pixel resolution */
             t_geotransform[2] = 0;/* 0 */
             t_geotransform[3] = uly;/* top left y */
             t_geotransform[4] = 0;/* 0 */
-            t_geotransform[5] =  -cx;/* n-s pixel resolution (negative value) */
-            double t_fh_RasterXSize  = cx;
+            t_geotransform[5] = -cx;/* n-s pixel resolution (negative value) */
+            double t_fh_RasterXSize = cx;
             double t_fh_RasterYSize = cx;
             double t_ulx = t_geotransform[0];
             double t_uly = t_geotransform[3];
@@ -801,14 +794,14 @@ namespace LKMAPS_Desktop
             {
                 SetProgress((int)(ct * 100.0 / tiles.Count));
 
-                String fileName = "/vsizip/" + _srtmFolder + t  ;
+                String fileName = "/vsizip/" + _srtmFolder + t;
                 if (_cellSize < 90)
                 {
                     String tt = t.Split('/')[1];
                     fileName = "/vsizip/" + _srtmFolder + tt + "\\" + Path.GetFileNameWithoutExtension(tt);
                 }
-                
-                Dataset  s_ds= Gdal.Open(fileName, Access.GA_ReadOnly);
+
+                Dataset s_ds = Gdal.Open(fileName, Access.GA_ReadOnly);
                 Band s_ba = s_ds.GetRasterBand(1);
                 double[] s_geotransform = new double[6];
                 s_ds.GetGeoTransform(s_geotransform);
@@ -818,28 +811,28 @@ namespace LKMAPS_Desktop
                 double s_lry = s_uly + s_geotransform[5] * s_ds.RasterYSize;
 
                 // figure out intersection region
-                double  tgw_ulx = Math.Max(t_ulx,s_ulx);
+                double tgw_ulx = Math.Max(t_ulx, s_ulx);
                 double tgw_lrx = Math.Min(t_lrx, s_lrx);
-                double  tgw_uly;
-                double  tgw_lry;
-                if ( t_geotransform[5] < 0 ) 
+                double tgw_uly;
+                double tgw_lry;
+                if (t_geotransform[5] < 0)
                 {
-                    tgw_uly = Math.Min(t_uly,s_uly);
-                    tgw_lry = Math.Max(t_lry,s_lry);
+                    tgw_uly = Math.Min(t_uly, s_uly);
+                    tgw_lry = Math.Max(t_lry, s_lry);
                 }
-                else 
+                else
                 {
-                    tgw_uly = Math.Max(t_uly,s_uly);
-                    tgw_lry = Math.Min(t_lry,s_lry);
+                    tgw_uly = Math.Max(t_uly, s_uly);
+                    tgw_lry = Math.Min(t_lry, s_lry);
                 }
 
                 // do they even intersect?
-                if ( tgw_ulx >= tgw_lrx ) 
+                if (tgw_ulx >= tgw_lrx)
                     continue;
-                if ( t_geotransform[5] < 0 && tgw_uly <= tgw_lry ) 
+                if (t_geotransform[5] < 0 && tgw_uly <= tgw_lry)
                     continue;
-                if ( t_geotransform[5] > 0 && tgw_uly >= tgw_lry ) 
-                     continue;
+                if (t_geotransform[5] > 0 && tgw_uly >= tgw_lry)
+                    continue;
 
                 // compute target window in pixel coordinates.
                 int tw_xoff = (int)((tgw_ulx - t_geotransform[0]) / t_geotransform[1] + 0.1);
@@ -847,7 +840,7 @@ namespace LKMAPS_Desktop
                 int tw_xsize = (int)((tgw_lrx - t_geotransform[0]) / t_geotransform[1] + 0.5) - tw_xoff;
                 int tw_ysize = (int)((tgw_lry - t_geotransform[3]) / t_geotransform[5] + 0.5) - tw_yoff;
 
-                if ( tw_xsize < 1 || tw_ysize < 1 )
+                if (tw_xsize < 1 || tw_ysize < 1)
                     continue;
 
                 // Compute source window in pixel coordinates.
@@ -856,12 +849,12 @@ namespace LKMAPS_Desktop
                 int sw_xsize = (int)((tgw_lrx - s_geotransform[0]) / s_geotransform[1] + 0.5) - sw_xoff;
                 int sw_ysize = (int)((tgw_lry - s_geotransform[3]) / s_geotransform[5] + 0.5) - sw_yoff;
 
-                if ( sw_xsize < 1 ||  sw_ysize < 1 )
+                if (sw_xsize < 1 || sw_ysize < 1)
                     continue;
 
                 short[] data = new short[sw_xsize * sw_ysize];
 
-                s_ba.ReadRaster(sw_xoff, sw_yoff, sw_xsize, sw_ysize,data, sw_xsize, sw_ysize, 0, 0 );
+                s_ba.ReadRaster(sw_xoff, sw_yoff, sw_xsize, sw_ysize, data, sw_xsize, sw_ysize, 0, 0);
 
                 t_ba.WriteRaster(tw_xoff, tw_yoff, tw_xsize, tw_ysize, data, sw_xsize, sw_ysize, 0, 0);
 
@@ -873,7 +866,7 @@ namespace LKMAPS_Desktop
                 s_ba = null;
             }
 
- 
+
             t_ba.FlushCache();
             t_ds.FlushCache();
             t_ba.Dispose();
@@ -887,7 +880,7 @@ namespace LKMAPS_Desktop
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             buttonCreateTerrain.Text = "Create Terrain";
-   
+
         }
 
 
@@ -910,8 +903,9 @@ namespace LKMAPS_Desktop
             //String remoteUri = "http://data.gis-lab.ru/srtm-tif/";
             String remoteUri = "http://viewfinderpanoramas.org/";
 
-            if (tile.Contains('/') ) {
-                remoteUri += tile.Split('/')[0] + "/"; 
+            if (tile.Contains('/'))
+            {
+                remoteUri += tile.Split('/')[0] + "/";
                 tile = tile.Split('/')[1];
             }
 
@@ -921,7 +915,8 @@ namespace LKMAPS_Desktop
                 zipName = tile + ".zip";
             }
 
-            if ( ! File.Exists(_srtmFolder + zipName)) {
+            if (!File.Exists(_srtmFolder + zipName))
+            {
                 DownloadFile(remoteUri, zipName, _srtmFolder);
             }
 
@@ -949,7 +944,7 @@ namespace LKMAPS_Desktop
             string[] words = tile.Split('/');
             if (words.Length != 2)
                 return;
-            remoteUri +=  words[0] + "/";
+            remoteUri += words[0] + "/";
             String fileName = words[1];
             DownloadFile(remoteUri, fileName, _srtmFolder);
         }
@@ -983,7 +978,7 @@ namespace LKMAPS_Desktop
                 backgroundWorkerFakeProgress.Dispose();
 
             }
-            
+
         }
         private void backgroundWorkerFakeProgress_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -992,10 +987,10 @@ namespace LKMAPS_Desktop
             {
                 i++;
                 if (i > 100) i = 0;
-                if (_fakeProcess) SetProgress(Math.Min(i,100));
+                if (_fakeProcess) SetProgress(Math.Min(i, 100));
                 i += 10;
                 Thread.Sleep(1000);
-                
+
             }
         }
 
@@ -1004,7 +999,7 @@ namespace LKMAPS_Desktop
             setStatus("Dowloading " + theFile + "...");
 
             bool bFTP = false;
-            if ( remoteUri.Substring(0,3) == "ftp" )
+            if (remoteUri.Substring(0, 3) == "ftp")
                 bFTP = true;
 
             downloadComplete = false;
@@ -1014,7 +1009,7 @@ namespace LKMAPS_Desktop
             myStringWebResource = remoteUri + theFile;
             Uri URL = new Uri(myStringWebResource);
 
-            if ( bFTP )
+            if (bFTP)
             {
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(URL);
                 request.Proxy = null;
@@ -1045,22 +1040,22 @@ namespace LKMAPS_Desktop
                 webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
                 webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
 
-                
 
 
 
-                if ( checkZipDataSet(location + theFile, theFile.Split('.')[0]))
+
+                if (checkZipDataSet(location + theFile, theFile.Split('.')[0]))
                 {
                     backgroundWorker1.ReportProgress(90);
                     downloadComplete = true;
                     return;
                 }
 
-               
+
                 try
                 {
                     // Start downloading the file
-                    webClient.DownloadFileAsync(URL, location +  theFile);
+                    webClient.DownloadFileAsync(URL, location + theFile);
                     while (!downloadComplete)
                     {
                         Application.DoEvents();
@@ -1069,7 +1064,7 @@ namespace LKMAPS_Desktop
 
                 }
 
-   
+
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
@@ -1077,7 +1072,7 @@ namespace LKMAPS_Desktop
             }
         }
 
-        private bool checkZipDataSet(string zipnale,string tile)
+        private bool checkZipDataSet(string zipnale, string tile)
         {
             try
             {
@@ -1106,13 +1101,13 @@ namespace LKMAPS_Desktop
         private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             int prog;
-            if ( e.TotalBytesToReceive == -1 ) 
+            if (e.TotalBytesToReceive == -1)
                 prog = (int)(((float)e.BytesReceived / (float)bytes_total) * 100.0);
             else
                 prog = (int)(((float)e.BytesReceived / (float)e.TotalBytesToReceive) * 100.0);
-            SetProgress(Math.Max(3,prog));
- //           if ( e.BytesReceived == bytes_total )
- //               downloadComplete = true;
+            SetProgress(Math.Max(3, prog));
+            //           if ( e.BytesReceived == bytes_total )
+            //               downloadComplete = true;
         }
 
 
@@ -1155,14 +1150,14 @@ namespace LKMAPS_Desktop
             downloadComplete = true;
 
 
- /*           if (e.Cancelled == true)
-            {
-                MessageBox.Show("Download has been canceled.");
-            }
-            else
-            {
-                MessageBox.Show("Download completed!");
-            }*/
+            /*           if (e.Cancelled == true)
+                       {
+                           MessageBox.Show("Download has been canceled.");
+                       }
+                       else
+                       {
+                           MessageBox.Show("Download completed!");
+                       }*/
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -1214,7 +1209,7 @@ namespace LKMAPS_Desktop
 
             foreach (FileInfo f in Files)
             {
-                string fileName= f.FullName;
+                string fileName = f.FullName;
                 try
                 {
                     double Left;
@@ -1250,22 +1245,22 @@ namespace LKMAPS_Desktop
                             pol.Stroke = new Pen(Color.Red, 1);
                             _currentMapsOverlay.Polygons.Add(pol);
 
-                            
 
-                            GMap.NET.WindowsForms.GMapMarker marker = new GMarkerGoogle(new PointLatLng((Top+Bottom)/2, (Left+Right)/2),
+
+                            GMap.NET.WindowsForms.GMapMarker marker = new GMarkerGoogle(new PointLatLng((Top + Bottom) / 2, (Left + Right) / 2),
                                                                         GMarkerGoogleType.red_small);
                             int cellSize = (int)(StepSize * 90 / 0.0008333333);
 
-                            marker.ToolTipText = f.Name + "\n" + 
+                            marker.ToolTipText = f.Name + "\n" +
                                 "CellSize=" + cellSize.ToString(CultureInfo.InvariantCulture) + "\n" +
                                 "Left=" + Left.ToString(CultureInfo.InvariantCulture) + "\n" +
                                 "Right=" + Right.ToString(CultureInfo.InvariantCulture) + "\n" +
                                 "Top=" + Top.ToString(CultureInfo.InvariantCulture) + "\n" +
-                                "Bottom=" + Bottom.ToString(CultureInfo.InvariantCulture) + "\n" 
+                                "Bottom=" + Bottom.ToString(CultureInfo.InvariantCulture) + "\n"
                                 ;
 
-                            marker.Tag = cellSize.ToString(CultureInfo.InvariantCulture) + "," + 
-                                Left.ToString(CultureInfo.InvariantCulture) + "," + 
+                            marker.Tag = cellSize.ToString(CultureInfo.InvariantCulture) + "," +
+                                Left.ToString(CultureInfo.InvariantCulture) + "," +
                                 Right.ToString(CultureInfo.InvariantCulture) + "," +
                                 Top.ToString(CultureInfo.InvariantCulture) + ","
                                 + Bottom.ToString(CultureInfo.InvariantCulture) + ",";
@@ -1292,15 +1287,15 @@ namespace LKMAPS_Desktop
 
             _tempLat1 = Convert.ToDouble(item.Tag.ToString().Split(',')[4]);
 
-            _tempLon1 =  Convert.ToDouble(item.Tag.ToString().Split(',')[1]);;
+            _tempLon1 = Convert.ToDouble(item.Tag.ToString().Split(',')[1]); ;
 
-            _tempLat2 =  Convert.ToDouble(item.Tag.ToString().Split(',')[3]);;
-            _tempLon2 =  Convert.ToDouble(item.Tag.ToString().Split(',')[2]);;
+            _tempLat2 = Convert.ToDouble(item.Tag.ToString().Split(',')[3]); ;
+            _tempLon2 = Convert.ToDouble(item.Tag.ToString().Split(',')[2]); ;
 
 
             UpdateMapArea();
 
-        
+
         }
 
 
@@ -1315,11 +1310,11 @@ namespace LKMAPS_Desktop
         private void buttonCreateTopology_Click(object sender, EventArgs e)
         {
             SaveSettings();
-                //string a1 =durationOSMData.ToString("hh\\:mm\\:ss");
+            //string a1 =durationOSMData.ToString("hh\\:mm\\:ss");
             LastActionTaken = "Download OSM Data";
             if (!checkAPIStatus())
                 return;
-            
+
             double area = (_maxLat - _minLat) * (_maxLon - _minLon);
             if (area > 15) //was 5 John Blyth
             {
@@ -1352,7 +1347,7 @@ namespace LKMAPS_Desktop
         {
             enableControls(false);
             StartTime = DateTime.Now.ToString("hh:mm:ss");
- 
+
             _step = 1; // Download OSM
             _nTiles = 1;
             NSTEPS = 8;
@@ -1369,7 +1364,7 @@ namespace LKMAPS_Desktop
             if (_useOSMRoads)
             {
                 if (_roadsDetail == "Low")
-                    api_url +=  "way[highway=motorway];way[highway=trunk];";
+                    api_url += "way[highway=motorway];way[highway=trunk];";
                 if (_roadsDetail == "Medium")
                     api_url += "way[highway=motorway];way[highway=trunk];way[highway=primary];";
                 if (_roadsDetail == "High")
@@ -1378,7 +1373,7 @@ namespace LKMAPS_Desktop
                     api_url += "way[highway=motorway];way[highway=trunk];way[highway=primary];way[highway=secondary];way[highway=tertiary];";
             }
 
-            if (_useOSMRail )
+            if (_useOSMRail)
             {
                 api_url += "way[railway=rail];";
             }
@@ -1414,7 +1409,7 @@ namespace LKMAPS_Desktop
 
             downloadOSM(System.Uri.EscapeUriString(api_url), "osm.osm", _osmFolder);
 
-             _step++;
+            _step++;
 
             //Reactivated John Blyth 210523
             FinishTime = DateTime.Now.ToString("hh:mm:ss");
@@ -1424,12 +1419,12 @@ namespace LKMAPS_Desktop
             char InvertedC = (char)34;
             //if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm"))
             //{
-                //File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm", textBoxOutFolder.Text + "\\osm.osm", true);
+            //File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm", textBoxOutFolder.Text + "\\osm.osm", true);
             //}
             //var command = InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + textBoxOutFolder.Text + "\\osm.osm" + InvertedC + " -o=" + InvertedC + textBoxOutFolder.Text + "\\osm.osm.pbf" + InvertedC;
             var command = InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm" + InvertedC + " -o=" + InvertedC + Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMaps\\osm\\osm.osm.pbf" + InvertedC;
             //using (var sr = new StreamWriter(textBoxOutFolder.Text + "\\LastRun.bat"))
-           // {
+            // {
             //   sr.WriteLine(command);
             // }
             //MessageBox.Show(command);
@@ -1451,7 +1446,7 @@ namespace LKMAPS_Desktop
             return;
         // Reactivated by John Blyth 140523
         OriginalMethod1:
-           processOSM(_osmFolder + "osm.osm", _mapName,  _minLon, _minLat, _maxLon, _maxLat);
+            processOSM(_osmFolder + "osm.osm", _mapName, _minLon, _minLat, _maxLon, _maxLat);
             _step++;
 
             stopsFakeProgress();
@@ -1475,7 +1470,7 @@ namespace LKMAPS_Desktop
             SetProgress(100);
 
             //MessageBox.Show("Finished Generating " + _mapName + " .DEM File.");
-            
+
             FinishTime = DateTime.Now.ToString("hh:mm:ss");
             TimeSpan durationOSMProcessing = DateTime.Parse(FinishTime).Subtract(DateTime.Parse(StartTime));
             if (LastActionTaken.Equals("Download OSM Data"))
@@ -1489,7 +1484,7 @@ namespace LKMAPS_Desktop
 
         }
 
-        private void processOSM(string osmFile, string mapName,double minLon, double minLat, double maxLon, double maxLat)
+        private void processOSM(string osmFile, string mapName, double minLon, double minLat, double maxLon, double maxLat)
         {
             // Configure OGR
             //var gdal_data = System.Environment.GetEnvironmentVariable("GDAL_DATA", EnvironmentVariableTarget.User);
@@ -1593,11 +1588,11 @@ namespace LKMAPS_Desktop
                 return;
             }
 
-            long nPoints=0, nLines= 0, nPolys = 0, nMultilines = 0;
-  
+            long nPoints = 0, nLines = 0, nPolys = 0, nMultilines = 0;
+
             setStatus("Processing OSM ... ");
             _step++;
-            string name,place,tags,highway,waterway,landuse,natural;
+            string name, place, tags, highway, waterway, landuse, natural;
 
             // Use interleaved reading - http://www.gdal.org/drv_osm.html
             bool bHasLayersNonEmpty = false;
@@ -1614,7 +1609,7 @@ namespace LKMAPS_Desktop
                     {
 
 
-                    while ((feat = OGRLayer.GetNextFeature()) != null)
+                        while ((feat = OGRLayer.GetNextFeature()) != null)
                         {
                             bHasLayersNonEmpty = true;
 
@@ -1833,7 +1828,7 @@ namespace LKMAPS_Desktop
                     }
                 }
             }
-                while (bHasLayersNonEmpty);
+            while (bHasLayersNonEmpty);
 
 
 
@@ -1876,7 +1871,7 @@ namespace LKMAPS_Desktop
             city_area = null;
 
 
-           
+
 
         }
 
@@ -2307,15 +2302,15 @@ namespace LKMAPS_Desktop
             string osmFile = GDALUtil.GetVMAPArea(_minLon, _minLat, _maxLon, _maxLat);
 
 
-            bytes_total = (long) ( 45000000 * ((_maxLon - _minLon) * (_maxLat - _minLat)) / 6 );
+            bytes_total = (long)(45000000 * ((_maxLon - _minLon) * (_maxLat - _minLat)) / 6);
 
 
-            string bbox = _minLon.ToString(CultureInfo.InvariantCulture) + "," + _minLat.ToString(CultureInfo.InvariantCulture) + "," + 
-                _maxLon.ToString(CultureInfo.InvariantCulture) + "," + _maxLat.ToString(CultureInfo.InvariantCulture) ;
-            
+            string bbox = _minLon.ToString(CultureInfo.InvariantCulture) + "," + _minLat.ToString(CultureInfo.InvariantCulture) + "," +
+                _maxLon.ToString(CultureInfo.InvariantCulture) + "," + _maxLat.ToString(CultureInfo.InvariantCulture);
+
             string api_url;
 
-            
+
 
             //Roads
             if (_useOSMRoads)
@@ -2325,7 +2320,7 @@ namespace LKMAPS_Desktop
                 api_url = "http://www.overpass-api.de/api/interpreter?data=[bbox][maxsize:1073741824][out:xml][timeout:900];";
                 api_url += "(";
 
-                api_url+= "way[\"highway\"~\"motorway|trunk";
+                api_url += "way[\"highway\"~\"motorway|trunk";
                 if (_roadsDetail == "Medium")
                     api_url += "|primary";
                 if (_roadsDetail == "High")
@@ -2346,7 +2341,7 @@ namespace LKMAPS_Desktop
                 _step++;
                 api_url = "http://www.overpass-api.de/api/interpreter?data=[bbox][maxsize:1073741824][out:xml][timeout:900];";
                 api_url += "(";
-                api_url += "way[\"railway\"~\"rail]"; 
+                api_url += "way[\"railway\"~\"rail]";
                 api_url += ");";
                 api_url += "(._;>;);out;&bbox=" + bbox;
 
@@ -2354,17 +2349,18 @@ namespace LKMAPS_Desktop
                 processRailwayOSM(_osmFolder + "railway.osm", _mapName);
 
 
-                
+
             }
             else
-            {   _step++;
+            {
+                _step++;
                 downloadPlanetOSM(osmFile, _osmFolder);
                 _step++;
                 processRoadsPlanetOSM(_osmFolder + osmFile + ".zip/roads.shp", _mapName, _minLon, _minLat, _maxLon, _maxLat);
             }
 
             //Rivers
-            if ( _useOSMRivers ) 
+            if (_useOSMRivers)
             {
                 _step++;
 
@@ -2385,7 +2381,7 @@ namespace LKMAPS_Desktop
                 processRiverOSM(_osmFolder + "rivers.osm", _mapName);
 
 
-                
+
             }
             else
             {
@@ -2415,7 +2411,7 @@ namespace LKMAPS_Desktop
                 processWaterOSM(_osmFolder + "water.osm", _mapName);
 
 
-               
+
 
             }
             else
@@ -2488,7 +2484,7 @@ namespace LKMAPS_Desktop
 
 
             _step++;
-            createTBLFile( _mapName);
+            createTBLFile(_mapName);
 
             _step++;
             //createFinalZip(_mapName, _outFolder);
@@ -2527,7 +2523,7 @@ namespace LKMAPS_Desktop
             Layer lyr_bnd_ocean_a = bnd_ocean_a.CreateLayer("bnd_ocean_a", srs, wkbGeometryType.wkbPolygon, null);
             lyr_bnd_ocean_a.CreateField(fld_level, 0);
 
-            DataSource osm_ds = Ogr.Open("/vsizip/" +  Path.GetDirectoryName(Application.ExecutablePath) +  "/data.zip/coast/coast_area.shp", 0);
+            DataSource osm_ds = Ogr.Open("/vsizip/" + Path.GetDirectoryName(Application.ExecutablePath) + "/data.zip/coast/coast_area.shp", 0);
             if (osm_ds == null)
             {
                 MessageBox.Show("Error processing costal");
@@ -2554,8 +2550,8 @@ namespace LKMAPS_Desktop
 
             try
             {
-                
-                while (cf < totF )
+
+                while (cf < totF)
                 {
                     f = layer.GetNextFeature();
                     if (f == null)
@@ -2628,7 +2624,7 @@ namespace LKMAPS_Desktop
             lyr_railroad_line.CreateField(fld_level, 0);
 
 
-            DataSource osm_ds = Ogr.Open( osmFile, 0);
+            DataSource osm_ds = Ogr.Open(osmFile, 0);
             if (osm_ds == null)
             {
                 MessageBox.Show("Error processing City points");
@@ -2815,7 +2811,7 @@ namespace LKMAPS_Desktop
             string startPath = _userFolder + mapName + "\\";
             string zipPath = outFolder + @"/" + mapName + ".LKM";
 
-            if (File.Exists(zipPath) )
+            if (File.Exists(zipPath))
             {
                 File.Delete(zipPath);
             }
@@ -2829,48 +2825,48 @@ namespace LKMAPS_Desktop
                     setStatus("Adding  " + a[i].Name);
                     zip.CreateEntryFromFile(startPath + a[i].Name, a[i].Name);
                 }
-                
 
-                
+
+
             }
             setStatus("Done");
         }
 
 
 
- /*       private void createFinalZip(string mapName, string outFolder)
-        {
-            
-            setStatus("Creting LKM file ... ");
+        /*       private void createFinalZip(string mapName, string outFolder)
+               {
 
-            string startPath = _userFolder + mapName + "\\";
-            string zipPath = outFolder + @"/" + mapName + ".LKM";
+                   setStatus("Creting LKM file ... ");
 
-            Directory.SetCurrentDirectory(startPath);
-            using (ZipFile zip = new ZipFile(zipPath))
-            {
-                try
-                {
+                   string startPath = _userFolder + mapName + "\\";
+                   string zipPath = outFolder + @"/" + mapName + ".LKM";
 
-                    DirectoryInfo f = new DirectoryInfo(startPath);
-                    FileInfo[] a = f.GetFiles();
-                    for (int i = 0; i < a.Length; i++)
-                    {
-                        setStatus("Adding  " + a[i].Name );
-                        zip.AddFile(startPath + a[i].Name,"");
-                    }
-                    zip.Save();
-                }
-                catch
-                {
-                }
-                setStatus("Done ");
-            
-            }
+                   Directory.SetCurrentDirectory(startPath);
+                   using (ZipFile zip = new ZipFile(zipPath))
+                   {
+                       try
+                       {
 
-        }*/
+                           DirectoryInfo f = new DirectoryInfo(startPath);
+                           FileInfo[] a = f.GetFiles();
+                           for (int i = 0; i < a.Length; i++)
+                           {
+                               setStatus("Adding  " + a[i].Name );
+                               zip.AddFile(startPath + a[i].Name,"");
+                           }
+                           zip.Save();
+                       }
+                       catch
+                       {
+                       }
+                       setStatus("Done ");
 
-        private void createTBLFile( string mapName)
+                   }
+
+               }*/
+
+        private void createTBLFile(string mapName)
         {
 
             setStatus("Creating TBL file ... ");
@@ -2890,7 +2886,7 @@ namespace LKMAPS_Desktop
                 sw.WriteLine("citybig_point, 5070,218,1,223,223,0");
                 sw.WriteLine("citymedium_point, 5080,501,1,223,223,0");
                 sw.WriteLine("citysmall_point, 5090,502,1,223,223,0");
-            }	
+            }
         }
 
         private void processUrbanPlanetOSM(string osmFile, string mapName, double minLon, double minLat, double maxLon, double maxLat)
@@ -3253,10 +3249,10 @@ namespace LKMAPS_Desktop
                 nf = new Feature(lyr_water_area.GetLayerDefn());
                 //Envelope env = new Envelope();
                 //geom.GetEnvelope(env) ;
- 
+
                 try
                 {
-                    nf.SetGeometry(geom. Intersection(poly));
+                    nf.SetGeometry(geom.Intersection(poly));
                 }
                 catch
                 {
@@ -3353,7 +3349,7 @@ namespace LKMAPS_Desktop
                 nf.SetGeometry(geom.Intersection(poly));
                 nf.SetField(0, "");
                 lyr_water_line.CreateFeature(nf);
-  
+
                 nf = null;
             }
 
@@ -3376,8 +3372,8 @@ namespace LKMAPS_Desktop
                 osm_ds = null;
                 return;
             }
-            string remoteUri = "http://osm/"  ;
-            DownloadFile(remoteUri, osmFile +  ".zip", _osmFolder);
+            string remoteUri = "http://osm/";
+            DownloadFile(remoteUri, osmFile + ".zip", _osmFolder);
         }
 
         private void processRoadsPlanetOSM(string osmFile, string mapName, double minLon, double minLat, double maxLon, double maxLat)
@@ -3417,8 +3413,8 @@ namespace LKMAPS_Desktop
             Layer lyr_railroad_line = railroad_line.CreateLayer("roadsmall_line", srs, wkbGeometryType.wkbLineString, null);
             lyr_railroad_line.CreateField(fld_level, 0);
 
-            
-            DataSource osm_ds = Ogr.Open("/vsizip/" + osmFile , 0);
+
+            DataSource osm_ds = Ogr.Open("/vsizip/" + osmFile, 0);
             if (osm_ds == null)
             {
                 MessageBox.Show("Error processing Roads");
@@ -3430,11 +3426,11 @@ namespace LKMAPS_Desktop
             if (layer == null)
             {
                 MessageBox.Show("Installation error. Please reinstall the software");
-                return ;
+                return;
             }
 
             int n = osm_ds.GetLayerCount();
-           
+
 
             layer = osm_ds.GetLayerByIndex(0);
 
@@ -3453,14 +3449,14 @@ namespace LKMAPS_Desktop
 
 
                 OSGeo.OGR.Feature nf = null;
-                if (name == "0" )
+                if (name == "0")
                 {
                     nf = new Feature(lyr_roadbig_line.GetLayerDefn());
                     nf.SetGeometry(geom.Intersection(poly));
                     nf.SetField(0, "");
                     lyr_roadbig_line.CreateFeature(nf);
                 }
-                else  if (name == "1")
+                else if (name == "1")
                 {
                     nf = new Feature(lyr_roadmedium_line.GetLayerDefn());
                     nf.SetGeometry(geom.Intersection(poly));
@@ -3680,12 +3676,12 @@ namespace LKMAPS_Desktop
                 String highway = f.GetFieldAsString(2);
 
                 OSGeo.OGR.Feature nf = null;
-                             
+
                 nf = new Feature(lyr_railroad_line.GetLayerDefn());
                 nf.SetGeometry(geom.SimplifyPreserveTopology(_simplify / (3600 * 30)));
                 nf.SetField(0, "0");
                 lyr_railroad_line.CreateFeature(nf);
-                
+
 
                 nf = null;
             }
@@ -3712,10 +3708,10 @@ namespace LKMAPS_Desktop
 
 
             OSGeo.OGR.FieldDefn fld_level = new OSGeo.OGR.FieldDefn("LEVEL", FieldType.OFTString);
-            
+
             DataSource roadbig_line = drv.CreateDataSource(_userFolder + mapName + @"\roadbig_line.shp", null);
-            Layer lyr_roadbig_line = roadbig_line.CreateLayer("roadbig_line",  srs,  wkbGeometryType.wkbLineString ,null);
-            lyr_roadbig_line.CreateField(fld_level,0);
+            Layer lyr_roadbig_line = roadbig_line.CreateLayer("roadbig_line", srs, wkbGeometryType.wkbLineString, null);
+            lyr_roadbig_line.CreateField(fld_level, 0);
 
             DataSource roadmedium_line = drv.CreateDataSource(_userFolder + mapName + @"\roadmedium_line.shp", null);
             Layer lyr_roadmedium_line = roadbig_line.CreateLayer("roadmedium_line", srs, wkbGeometryType.wkbLineString, null);
@@ -3748,7 +3744,7 @@ namespace LKMAPS_Desktop
                 SetProgress((int)(cf * 100.0 / totF));
 
                 var geom = f.GetGeometryRef();
-                String id = f.GetFieldAsString(0) ;
+                String id = f.GetFieldAsString(0);
                 String name = f.GetFieldAsString(1);
                 String highway = f.GetFieldAsString(2);
 
@@ -3796,7 +3792,7 @@ namespace LKMAPS_Desktop
 
 
 
-        private void downloadOSM(string api_url, string filename,string destFolder)
+        private void downloadOSM(string api_url, string filename, string destFolder)
         {
             setStatus("Getting OSM data - may take > 15 minutes.");
 
@@ -3833,15 +3829,15 @@ namespace LKMAPS_Desktop
                     //    Application.DoEvents();
                     //}
                     //downloadComplete = false;
-                    
+
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
-                
+
             }
-            
+
         }
 
 
@@ -3858,7 +3854,7 @@ namespace LKMAPS_Desktop
             //    sr.WriteLine(textBoxOutFolder.Text);
             //}
 
-            FormHelpUtilities frm =new FormHelpUtilities();
+            FormHelpUtilities frm = new FormHelpUtilities();
             frm.ShowDialog();
             return;
             string LatSouth = textBoxLatMin.Text;
@@ -3870,7 +3866,7 @@ namespace LKMAPS_Desktop
             //MessageBox.Show(InvertedC + Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm" + InvertedC +"\n" + InvertedC + textBoxOutFolder.Text + "\\osm.osm" + InvertedC);
             if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm"))
             {
-                File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm" ,textBoxOutFolder.Text + "\\osm.osm", true);
+                File.Copy(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\LKMAPS\\osm\\osm.osm", textBoxOutFolder.Text + "\\osm.osm", true);
             }
             using (var sr = new StreamWriter(textBoxOutFolder.Text + "\\LastOsmConvertRun.bat"))
             {
@@ -3892,7 +3888,7 @@ namespace LKMAPS_Desktop
             //var command = InvertedC + textBox1.Text + "\\" + "osmconvert64-0.8.8p.exe" + InvertedC + " " + InvertedC + button6.Text + InvertedC + " -b=" + LongWest + "," + LatSouth + "," + LongEast + "," + LatNorth + " -o=" + InvertedC + textBox1.Text + "\\" + textBox2.Text + ".osm.pbf" + InvertedC;
             //var command = InvertedC + textBoxOutFolder.Text + "\\LastOsmConvertRun.bat" + InvertedC;
             //Var command = InvertedC + textBoxOutFolder.Text + "\\LastRun.bat" + InvertedC;
-            var command=InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + textBoxOutFolder.Text + "\\osm.osm" + InvertedC + " -o=" + InvertedC + textBoxOutFolder.Text + "\\osm.osm.pbf" + InvertedC;
+            var command = InvertedC + Path.GetDirectoryName(Application.ExecutablePath) + "\\" + "osmconvert.exe" + InvertedC + " " + InvertedC + textBoxOutFolder.Text + "\\osm.osm" + InvertedC + " -o=" + InvertedC + textBoxOutFolder.Text + "\\osm.osm.pbf" + InvertedC;
             System.Diagnostics.ProcessStartInfo cmdsi = new ProcessStartInfo(command);
             //cmdsi.WindowStyle = ProcessWindowStyle.Hidden;
             cmdsi.CreateNoWindow = true;
@@ -3933,7 +3929,7 @@ namespace LKMAPS_Desktop
 
         private void trackBarPixelSize_ValueChanged_1(object sender, EventArgs e)
         {
-            _cellSize = 10 *  (int)(trackBarPixelSize.Value / 1000);
+            _cellSize = 10 * (int)(trackBarPixelSize.Value / 1000);
             labelPixelSize.Text = _cellSize.ToString(CultureInfo.InvariantCulture);
         }
 
@@ -4018,17 +4014,17 @@ namespace LKMAPS_Desktop
                 MessageBox.Show("No Offline .OSM.PBF OpenStreetMap Topology File Selected.\n\nPlease try again.");
                 return;
             }
-            SkipPickingFile:
-            _offlineOSMFile =textBoxOutFolder.Text + "\\" + textBoxMapName.Text + ".osm.pbf";
-                goto SkipHere1;
-                // End of John Blyth add
+        SkipPickingFile:
+            _offlineOSMFile = textBoxOutFolder.Text + "\\" + textBoxMapName.Text + ".osm.pbf";
+            goto SkipHere1;
+        // End of John Blyth add
 
-               SkipJB1:
+        SkipJB1:
             StartTime = DateTime.Now.ToString("hh:mm:ss");
             _offlineOSMFile = openFileDialog1.FileName;
-                SkipHere1:
-                backgroundWorkerOffline.RunWorkerAsync();
-            
+        SkipHere1:
+            backgroundWorkerOffline.RunWorkerAsync();
+
         }
 
         private void backgroundWorkerOffline_DoWork(object sender, DoWorkEventArgs e)
@@ -4099,17 +4095,17 @@ namespace LKMAPS_Desktop
             {
                 MessageBox.Show("Finished Generating " + _mapName + ".LKM File." + "\n\n" + "Extracting the OpenStreetMap Data took:- " + durationOSMProcessing);
             }
-         }
+        }
 
         private void fixDBF_LDID(string mapName)
         {
 
             string mapfolder = _userFolder + mapName;
             string[] files = Directory.GetFiles(mapfolder, "*.dbf");
-            foreach  (string fn in files)
+            foreach (string fn in files)
             {
                 byte[] bytes = File.ReadAllBytes(fn);
-                if ( bytes.Length > 29  )
+                if (bytes.Length > 29)
                 {
                     bytes[29] = 0x00;
                     File.WriteAllBytes(fn, bytes);
