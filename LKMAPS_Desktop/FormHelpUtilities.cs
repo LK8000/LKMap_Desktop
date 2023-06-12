@@ -1,4 +1,7 @@
-﻿using Microsoft.SqlServer.Server;
+﻿// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright The LKMap Desktop Project
+
+using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
