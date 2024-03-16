@@ -1493,13 +1493,11 @@ namespace LKMAPS_Desktop
             Gdal.SetConfigOption("OSM_COMPRESS_NODES", "YES");
             Gdal.SetConfigOption("CPL_TMPDIR", _tmpFolder);
             Gdal.SetConfigOption("OSM_MAX_TMPFILE_SIZE", "0");
-            ////Gdal.SetConfigOption("SHAPE_ENCODING", "ISO-8859-1");
-            OSGeo.GDAL.Gdal.SetConfigOption("GDAL_FILENAME_IS_UTF8", "YES");
-            Gdal.SetConfigOption("SHAPE_ENCODING", "UTF-8");
-            Gdal.SetConfigOption("ENCODING", "UTF-8");
+            Gdal.SetConfigOption("GDAL_FILENAME_IS_UTF8", "YES");
+            Gdal.SetConfigOption("SHAPE_ENCODING", encoding);
+            Gdal.SetConfigOption("ENCODING", encoding);
+            Gdal.SetConfigOption("OGR_ORGANIZE_POLYGONS", "DEFAULT");
 
-
-            //Ogr.RegisterAll();
             OSGeo.OGR.Ogr.RegisterAll();
             OSGeo.OGR.Driver drv = Ogr.GetDriverByName("ESRI Shapefile");
             OSGeo.OSR.SpatialReference srs = new OSGeo.OSR.SpatialReference(null);
@@ -2543,7 +2541,6 @@ namespace LKMAPS_Desktop
 
             layer = osm_ds.GetLayerByIndex(0);
 
-            OSGeo.OGR.Feature f;
             layer.ResetReading();
             long cf = 0;
             long totF = layer.GetFeatureCount(0);
@@ -2553,22 +2550,17 @@ namespace LKMAPS_Desktop
 
                 while (cf < totF)
                 {
-                    f = layer.GetNextFeature();
+                    Feature f = layer.GetNextFeature();
                     if (f == null)
                         break;
 
                     cf++;
                     SetProgress((int)(cf * 100.0 / totF));
-
-                    var geom = f.GetGeometryRef();
+                    Geometry geom = f.GetGeometryRef();
                     String name = f.GetFieldAsString(1);
 
 
-                    OSGeo.OGR.Feature nf = null;
-
-                    nf = new Feature(lyr_bnd_ocean_a.GetLayerDefn());
-                    //Envelope env = new Envelope();
-                    //geom.GetEnvelope(env) ;
+                    Feature nf = new Feature(lyr_bnd_ocean_a.GetLayerDefn());
 
                     try
                     {

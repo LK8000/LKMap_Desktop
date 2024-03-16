@@ -68,8 +68,7 @@ namespace LKMAPS_Desktop
                     return;
                 }
 
-                string executingAssemblyFile = new Uri(Assembly.GetExecutingAssembly().GetName().CodeBase).LocalPath;
-                executingDirectory = Path.GetDirectoryName(executingAssemblyFile);
+                executingDirectory = AppContext.BaseDirectory;
 
                 if (string.IsNullOrEmpty(executingDirectory))
                     throw new InvalidOperationException("cannot get executing directory");
@@ -106,8 +105,8 @@ namespace LKMAPS_Desktop
                 Environment.SetEnvironmentVariable("PROJ_LIB", projSharePath);
                 Gdal.SetConfigOption("PROJ_LIB", projSharePath);
                 OSGeo.OSR.Osr.SetPROJSearchPaths(new[] { projSharePath });
-
-                string certificateFile = Path.Combine(gdalPath, "curl-ca-bundle.crt");
+				
+				string certificateFile = Path.Combine(gdalPath, "curl-ca-bundle.crt");
                 Gdal.SetConfigOption("GDAL_CURL_CA_BUNDLE", certificateFile);
 
                 _usable = true;
